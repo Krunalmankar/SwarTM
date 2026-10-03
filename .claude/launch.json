@@ -1,0 +1,32 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "swartm-site",
+      "runtimeExecutable": "C:\\Users\\Sanket\\AppData\\Local\\Programs\\nodejs\\node.exe",
+      "runtimeArgs": ["scripts/serve-dist.mjs"],
+      "port": 4173
+    },
+    {
+      "name": "swartm-lab",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        ".claude/serve.ps1",
+        "-Port",
+        "4174",
+        "-Lab"
+      ],
+      "port": 4174
+    },
+    {
+      "name": "astro-dev",
+      "runtimeExecutable": "C:\\Users\\Sanket\\AppData\\Local\\Programs\\nodejs\\node.exe",
+      "runtimeArgs": ["node_modules/astro/bin/astro.mjs", "dev", "--port", "4321"],
+      "port": 4321
+    }
+  ]
+}

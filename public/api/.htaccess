@@ -1,0 +1,14 @@
+# Form endpoints only. Everything else in this folder is private.
+Options -Indexes
+
+<IfModule mod_authz_core.c>
+    Require all denied
+    <FilesMatch "^(contact|subscribe)\.php$">
+        Require all granted
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set Cache-Control "no-store"
+    Header always set X-Robots-Tag "noindex, nofollow"
+</IfModule>

@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import { site } from '../config/site';
+
+/*
+ * REVIEW BEFORE LAUNCH: this notice describes what the website technically does.
+ * Have it checked against the laws that apply to you (e.g. India's DPDP Act, GDPR
+ * for EU visitors) and fill in the bracketed details.
+ */
+const lastUpdated = '3 October 2026';
+---
+
+<BaseLayout
+  title="Privacy notice | SwarTM"
+  description="How SwarTM handles the personal data you share through this website's contact and newsletter forms."
+>
+  <PageHero eyebrow="Privacy" title="Privacy notice" lead={`Last updated ${lastUpdated}.`} pb="pb-40" />
+
+  <section class="container pb-96">
+    <div class="card pad-40 prose measure-820">
+      <h2>Who we are</h2>
+      <p>
+        This website is operated by {site.name} ([REGISTERED COMPANY NAME AND ADDRESS]), based in{' '}
+        {site.location.display}. For any privacy question, contact us at [PRIVACY CONTACT EMAIL].
+      </p>
+
+      <h2>What we collect and why</h2>
+      <ul>
+        <li>
+          <strong>Contact form:</strong> your name, work email, company (optional), area of interest and
+          message. We use them only to reply to your enquiry and, if you become a client, to manage the
+          engagement.
+        </li>
+        <li>
+          <strong>Newsletter:</strong> your work email, used only to send our monthly article. Every email
+          includes a way to unsubscribe, or you can ask us to remove you at any time.
+        </li>
+        <li>
+          <strong>Security logs:</strong> to protect the forms from abuse we keep a short-lived, one-way
+          hashed form of your IP address. It is deleted automatically within 24 hours.
+        </li>
+      </ul>
+
+      <h2>What we don’t do</h2>
+      <ul>
+        <li>This website sets no cookies and uses no analytics, advertising or tracking scripts.</li>
+        <li>
+          Fonts and all other files are served from our own domain; your browser does not contact third
+          parties.
+        </li>
+        <li>We never sell or share your details with third parties for marketing.</li>
+      </ul>
+
+      <h2>Where your data goes</h2>
+      <p>
+        Form submissions are delivered to our business mailbox through our web host, [HOSTING PROVIDER].
+        Newsletter sign-ups are stored on that host outside the public website. We keep enquiries for as long
+        as needed to respond and for up to [RETENTION PERIOD] afterwards, unless you become a client.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        You can ask to see, correct or delete the personal data we hold about you, or withdraw consent to the
+        newsletter, by emailing [PRIVACY CONTACT EMAIL]. We will respond within 30 days.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose :global(h2) {
+    margin: 28px 0 10px;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose p,
+  .prose ul {
+    margin: 0 0 14px;
+    color: var(--ink-muted);
+  }
+
+  .prose ul {
+    padding-left: 20px;
+  }
+
+  .prose li + li {
+    margin-top: 8px;
+  }
+
+  .prose strong {
+    color: var(--ink);
+  }
+</style>

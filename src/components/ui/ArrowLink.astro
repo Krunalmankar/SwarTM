@@ -1,0 +1,15 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  class?: string;
+}
+
+const { href, class: className } = Astro.props;
+---
+
+<a href={href} class:list={['arrow-link', className]}>
+  <slot />
+  <Icon name="arrowRight" size={16} strokeWidth={2} class="arrow" />
+</a>

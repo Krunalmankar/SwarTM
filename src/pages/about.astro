@@ -1,0 +1,491 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import CtaBand from '../components/sections/CtaBand.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import Icon from '../components/ui/Icon.astro';
+import type { IconName } from '../components/ui/icons';
+import logo from '../assets/logo.png';
+
+/** Specialities placed around the network mark. Position classes live in the style block. */
+const specialities: {
+  label: string;
+  pos: string;
+  tone: 'deep' | 'blue';
+  strong?: boolean;
+  side: 'left' | 'right';
+}[] = [
+  { label: 'IRM / GRC', pos: 'c1', tone: 'deep', side: 'right' },
+  { label: 'Managed Services', pos: 'c2', tone: 'deep', side: 'left' },
+  { label: 'ITOM', pos: 'c3', tone: 'blue', strong: true, side: 'right' },
+  { label: 'ITAM', pos: 'c4', tone: 'deep', side: 'left' },
+  { label: 'AIOps', pos: 'c5', tone: 'blue', strong: true, side: 'right' },
+  { label: 'ITSM', pos: 'c6', tone: 'deep', side: 'left' },
+  { label: 'CMDB/CSDM', pos: 'c8', tone: 'blue', strong: true, side: 'left' },
+  { label: 'CSM', pos: 'c9', tone: 'deep', side: 'right' },
+];
+
+const principles: { icon: IconName; title: string; text: string }[] = [
+  {
+    icon: 'target',
+    title: 'One platform, mastered.',
+    text: 'ServiceNow first, so every hour goes into depth, not breadth.',
+  },
+  {
+    icon: 'sparkle',
+    title: 'AI with foundations.',
+    text: 'We fix data and design before we switch agents on.',
+  },
+  {
+    icon: 'users',
+    title: 'Senior people on every project.',
+    text: 'You work with the architect who designs it.',
+  },
+];
+---
+
+<BaseLayout
+  title="About SwarTM | ServiceNow AI & CMDB specialists"
+  description="SwarTM is a focused team with deep ServiceNow expertise, founded by a practising ServiceNow architect to lead AI transformation on solid data foundations."
+>
+  <PageHero
+    eyebrow="About SwarTM"
+    title="A focused team with deep ServiceNow expertise."
+    lead="Every node in our mark represents a speciality we practise. They are connected because, on ServiceNow, no capability delivers AI value on its own."
+    centered
+    pb="pb-40"
+  />
+
+  <section class="container pt-24 pb-72 in-view" aria-label="Our specialities">
+    <figure class="card diagram-card">
+      <div class="diagram" aria-hidden="true">
+        <div class="diagram__orbit">
+          <div class="diagram__ring orbit">
+            <span class="diagram__ring-dot"></span>
+          </div>
+        </div>
+        <Image
+          src={logo}
+          alt=""
+          widths={[320, 480, 640, 800, 1200, 1600]}
+          sizes="(max-width: 1160px) 66vw, 780px"
+          loading="eager"
+          fetchpriority="high"
+          class="diagram__mark"
+        />
+        {specialities.map((s) => (
+          <span class:list={['spec', `spec--${s.pos}`, `spec--${s.side}`, s.strong && 'spec--strong']}>
+            <span class:list={['dot', s.tone === 'blue' ? 'dot--blue' : 'dot--deep']} />
+            {s.label}
+          </span>
+        ))}
+        <span class="spec spec--c7 spec--right spec--hero">
+          <span class="dot dot--green"></span>ServiceNow AI
+        </span>
+      </div>
+      <!-- Text version of the diagram for screen readers (the drawing itself is aria-hidden). -->
+      <ul class="spec-list" aria-label="Our specialities">
+        <li class="chip chip--lg">
+          <span class="dot dot--green"></span>ServiceNow AI
+        </li>
+        {specialities.map((s) => (
+          <li class="chip chip--lg">
+            <span class:list={['dot', s.tone === 'blue' ? 'dot--blue' : 'dot--deep']} />
+            {s.label}
+          </li>
+        ))}
+      </ul>
+      <figcaption class="legend">
+        <span class="legend__item">
+          <span class="legend__node legend__node--lg"></span>Core practices
+        </span>
+        <span class="legend__item">
+          <span class="legend__node"></span>Connected specialities
+        </span>
+        <span class="legend__item">
+          <span class="legend__line"></span>How they reinforce each other
+        </span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="container grid grid--440 gap-56 pt-24 pb-88 in-view">
+    <div class="stack gap-16">
+      <Eyebrow>Our story</Eyebrow>
+      <h2 class="heading-2">Founded by a practising ServiceNow architect.</h2>
+      <p class="muted">
+        SwarTM began with years of hands-on ServiceNow work across ITOM, CMDB, CSDM, ITAM, Discovery and
+        Service Mapping. Across every engagement, one lesson stood out: AI on ServiceNow is only as good as
+        the platform and data beneath it.
+      </p>
+      <p class="muted">SwarTM was founded to lead ServiceNow AI transformation on that principle.</p>
+    </div>
+    <div class="stack gap-16">
+      <Eyebrow>Why a niche focus</Eyebrow>
+      <ul class="stack gap-16 plain-list">
+        {principles.map((p) => (
+          <li class="row gap-14 align-start principle">
+            <span class="icon-tile icon-tile--40">
+              <Icon name={p.icon} size={20} />
+            </span>
+            <div>
+              <strong>{p.title}</strong>
+              <br />
+              <span class="muted">{p.text}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Work with a focused team of ServiceNow specialists."
+    label="Speak to our team"
+    class="pt-96 pb-96"
+  />
+</BaseLayout>
+
+<style>
+  .principle {
+    flex-wrap: nowrap;
+  }
+
+  .diagram-card {
+    margin: 0;
+    padding: 32px 24px;
+  }
+
+  .diagram {
+    position: relative;
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    aspect-ratio: 1812 / 900;
+  }
+
+  .diagram__orbit {
+    position: absolute;
+    left: 14.6%;
+    top: 0.6%;
+    width: 72%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .diagram__ring {
+    position: relative;
+    height: 104%;
+    aspect-ratio: 1 / 1;
+    border: 1px dashed var(--connector-grey);
+    border-radius: var(--radius-full);
+  }
+
+  .diagram__ring-dot {
+    position: absolute;
+    top: -6px;
+    left: calc(50% - 6px);
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-full);
+    background: var(--signal-green);
+  }
+
+  .diagram :global(.diagram__mark) {
+    position: absolute;
+    left: 14.6%;
+    top: 0.6%;
+    width: 72%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 0% 50%;
+  }
+
+  .spec {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    padding: 6px 12px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-full);
+    background: var(--surface-200);
+    box-shadow: var(--shadow-chip);
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 500;
+  }
+
+  .spec--strong {
+    font-weight: 600;
+  }
+
+  /* Chips rise in one after another. `translate` composes with the positioning
+     `transform`, so the animation stays on the GPU. */
+  .spec {
+    animation: chip-rise 0.6s ease-out both;
+  }
+  .spec--c1 {
+    animation-delay: 0.3s;
+  }
+  .spec--c2 {
+    animation-delay: 0.4s;
+  }
+  .spec--c3 {
+    animation-delay: 0.5s;
+  }
+  .spec--c4 {
+    animation-delay: 0.6s;
+  }
+  .spec--c5 {
+    animation-delay: 0.7s;
+  }
+  .spec--c6 {
+    animation-delay: 0.8s;
+  }
+  .spec--c7 {
+    animation-delay: 0.9s;
+  }
+  .spec--c8 {
+    animation-delay: 1s;
+  }
+  .spec--c9 {
+    animation-delay: 1.1s;
+  }
+
+  @keyframes chip-rise {
+    from {
+      opacity: 0;
+      translate: 0 12px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  /* Text version of the diagram for screen readers (the drawing is aria-hidden). */
+  .spec-list {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    list-style: none;
+  }
+
+  .spec--right {
+    transform: translateY(-50%);
+  }
+  .spec--left {
+    transform: translate(-100%, -50%);
+  }
+
+  .spec--hero {
+    padding: 8px 14px;
+    border-color: var(--navy);
+    background: var(--navy);
+    color: var(--ink-on-dark);
+    box-shadow: 0 6px 16px rgba(8, 31, 58, 0.18);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* Positions measured against the network mark (percent of the diagram box). */
+  .spec--c1 {
+    left: 68.6%;
+    top: 5%;
+  }
+  .spec--c2 {
+    left: 61.6%;
+    top: 9.8%;
+  }
+  .spec--c3 {
+    left: 72%;
+    top: 28.3%;
+  }
+  .spec--c4 {
+    left: 42.5%;
+    top: 39.2%;
+  }
+  .spec--c5 {
+    left: 61.6%;
+    top: 45%;
+  }
+  .spec--c6 {
+    left: 32.1%;
+    top: 58.3%;
+  }
+  .spec--c7 {
+    left: 49%;
+    top: 75%;
+  }
+  .spec--c8 {
+    left: 22.9%;
+    top: 78.3%;
+  }
+  .spec--c9 {
+    left: 36.5%;
+    top: 90%;
+  }
+
+  /*
+   * Phones and small tablets: compact labels positioned from each circle's real
+   * centre in the logo (--ax: label anchor as a fraction of the image width,
+   * --ny: circle centre as a fraction of its height). The mark is drawn a little
+   * smaller and centred so labels on the left side have room.
+   */
+  @media (max-width: 760px) {
+    .diagram-card {
+      padding: 24px 12px;
+    }
+
+    .diagram {
+      --img-x: 22%;
+      --img-w: 66%;
+      --img-y: 4.2%;
+      --img-h: 91.6%;
+    }
+
+    .diagram__orbit,
+    .diagram :global(.diagram__mark) {
+      left: var(--img-x);
+      top: var(--img-y);
+      width: var(--img-w);
+      height: var(--img-h);
+    }
+
+    .spec {
+      left: calc(var(--img-x) + var(--img-w) * var(--ax));
+      top: calc(var(--img-y) + var(--img-h) * var(--ny));
+      gap: 4px;
+      padding: 3px 7px;
+      font-size: 11px;
+      line-height: 14px;
+      box-shadow: 0 2px 6px rgba(8, 31, 58, 0.08);
+    }
+
+    .spec .dot {
+      width: 6px;
+      height: 6px;
+    }
+
+    .spec--hero {
+      padding: 3px 8px;
+      font-size: 11px;
+      box-shadow: 0 3px 8px rgba(8, 31, 58, 0.18);
+    }
+
+    .spec--right {
+      transform: translate(3px, -50%);
+    }
+
+    .spec--left {
+      transform: translate(calc(-100% - 3px), -50%);
+    }
+
+    .spec--c1 {
+      --ax: 0.737;
+      --ny: 0.05;
+    }
+    .spec--c2 {
+      --ax: 0.548;
+      --ny: 0.183;
+    }
+    .spec--c3 {
+      --ax: 0.783;
+      --ny: 0.283;
+    }
+    .spec--c4 {
+      --ax: 0.383;
+      --ny: 0.383;
+    }
+    .spec--c5 {
+      --ax: 0.64;
+      --ny: 0.45;
+    }
+    .spec--c6 {
+      --ax: 0.272;
+      --ny: 0.583;
+    }
+    .spec--c7 {
+      --ax: 0.498;
+      --ny: 0.65;
+    }
+    .spec--c8 {
+      --ax: 0.144;
+      --ny: 0.783;
+    }
+    .spec--c9 {
+      --ax: 0.291;
+      --ny: 0.883;
+    }
+  }
+
+  @media (max-width: 400px) {
+    /* Slightly smaller, more centred mark so the left-hand labels fit on 320px phones. */
+    .diagram {
+      --img-x: 24.5%;
+      --img-w: 64%;
+      --img-y: 5.5%;
+      --img-h: 88.9%;
+    }
+
+    .spec,
+    .spec--hero {
+      font-size: 10px;
+      padding: 2px 6px;
+    }
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    padding-top: 24px;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  .legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .legend__node {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    background: var(--node-deep);
+  }
+
+  .legend__node--lg {
+    width: 14px;
+    height: 14px;
+    background: var(--node-blue);
+  }
+
+  .legend__line {
+    width: 18px;
+    height: 2px;
+    background: var(--connector-grey);
+  }
+
+  @media (max-width: 600px) {
+    .legend {
+      gap: 8px 18px;
+      padding-top: 16px;
+      font-size: 12px;
+    }
+  }
+</style>

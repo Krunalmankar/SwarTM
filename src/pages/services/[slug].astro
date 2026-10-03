@@ -1,0 +1,179 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import Eyebrow from '../../components/ui/Eyebrow.astro';
+import CheckList from '../../components/ui/CheckList.astro';
+import SectionHeading from '../../components/sections/SectionHeading.astro';
+import TimelineBars from '../../components/sections/TimelineBars.astro';
+import CtaBand from '../../components/sections/CtaBand.astro';
+import ApproachArt from '../../components/illustrations/ApproachArt.astro';
+import OtherServices from '../../components/sections/OtherServices.astro';
+import { getServices, servicePath, type Service } from '../../lib/content';
+import { breadcrumbSchema, serviceSchema } from '../../lib/seo';
+
+export const getStaticPaths = (async () => {
+  const services = await getServices();
+  return services.map((service) => ({ params: { slug: service.id }, props: { service } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const { data } = service;
+const site = Astro.site!;
+const path = servicePath(service);
+const lastStep = data.approach.steps.length - 1;
+---
+
+<BaseLayout
+  title={data.seo.title}
+  description={data.seo.description}
+  jsonLd={[
+    breadcrumbSchema(site, [
+      { name: 'Home', path: '/' },
+      { name: 'Services', path: '/services/' },
+      { name: data.shortName, path },
+    ]),
+    serviceSchema(site, { name: data.cardTitle, description: data.seo.description, path }),
+  ]}
+>
+  <!-- Hero -->
+  <section class="container grid grid--420 gap-48 align-center pt-72 pb-88">
+    <div class="stack gap-20">
+      <nav aria-label="Breadcrumb" class="reveal">
+        <ol class="breadcrumb">
+          <li>
+            <a href="/services/">Services</a>
+          </li>
+          <li aria-current="page">{data.shortName}</li>
+        </ol>
+      </nav>
+      <span
+        class:list={['icon-tile icon-tile--56 reveal', data.hero.iconStyle === 'navy' && 'icon-tile--navy']}
+      >
+        <Icon name={data.icon} size={28} />
+      </span>
+      <h1 class="display-1 reveal delay-1">{data.hero.title}</h1>
+      <p class="lead reveal delay-2">{data.hero.lead}</p>
+      <div class="reveal delay-3">
+        <Button href="/contact/" arrow>
+          {data.hero.cta}
+        </Button>
+      </div>
+    </div>
+    <aside class="card pad-32 stack gap-16" aria-label="At a glance">
+      <Eyebrow>At a glance</Eyebrow>
+      <ul class="icon-list gap-16">
+        {data.glance.map((item) => (
+          <li>
+            <Icon name={item.icon} size={20} class="text-accent" />
+            <span>
+              <strong>{item.label}</strong> {item.text}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </section>
+
+  <!-- Problem -->
+  <section class="band in-view" aria-labelledby="problem">
+    <div class="container stack gap-36 pt-96 pb-96">
+      <SectionHeading eyebrow="The problem" title={data.problem.heading} id="problem" />
+      <ul class="grid grid--trio gap-24 plain-list">
+        {data.problem.items.map((item) => (
+          <li class="tile stack gap-12">
+            <Icon name={item.icon} size={28} class="tile-icon problem-icon" />
+            <h3 class="heading-6">{item.title}</h3>
+            <p class="muted">{item.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Approach -->
+  <section class="container stack gap-36 pt-96 pb-96 in-view" aria-labelledby="approach">
+    <div class="row gap-24 justify-between approach-head">
+      <SectionHeading
+        eyebrow="Our approach"
+        title={data.approach.heading}
+        id="approach"
+        class="approach-title"
+      />
+      <ApproachArt slug={service.id} />
+    </div>
+    <ol class="grid grid--240 gap-32 plain-list">
+      {data.approach.steps.map((step, i) => (
+        <li class:list={['step stack gap-10', i === lastStep && 'step--last']}>
+          <span class:list={['numeral', i === lastStep && 'text-green']}>
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <h3 class="heading-6">{step.title}</h3>
+          <p class="muted">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- Deliverables & timeline -->
+  <section class="container grid grid--480 gap-24 pb-96 in-view">
+    <div class="card pad-36 stack gap-20">
+      <Eyebrow>Deliverables</Eyebrow>
+      <CheckList items={data.deliverables} />
+    </div>
+    <div class="card pad-36 stack gap-20">
+      <Eyebrow>Typical timeline</Eyebrow>
+      <TimelineBars phases={data.timeline} />
+    </div>
+  </section>
+
+  <OtherServices current={service.id} />
+
+  <CtaBand heading={data.cta.heading} label={data.cta.label} />
+</BaseLayout>
+
+<style>
+  .approach-head :global(.approach-title) {
+    flex: 1 1 320px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  .breadcrumb li + li::before {
+    content: '/';
+    margin-right: 6px;
+  }
+
+  .breadcrumb a {
+    display: inline-block;
+    padding-block: 4px; /* 24px touch target (WCAG 2.2) */
+    text-decoration: none;
+  }
+
+  .tile :global(.problem-icon) {
+    color: var(--node-blue);
+  }
+
+  .step {
+    padding-top: 20px;
+    border-top: 2px solid var(--node-blue);
+  }
+
+  .step--last {
+    border-top-color: var(--signal-green);
+  }
+</style>

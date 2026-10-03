@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  items: string[];
+  tone?: 'green' | 'blue';
+  size?: 'md' | 'sm';
+  class?: string;
+}
+
+const { items, tone = 'green', size = 'md', class: className } = Astro.props;
+---
+
+<ul class:list={['icon-list', size === 'sm' ? 'icon-list--tight gap-10' : 'gap-14', className]}>
+  {items.map((item) => (
+    <li>
+      <Icon name="check" size={size === 'sm' ? 18 : 20} strokeWidth={2.25} class={`check check--${tone}`} />
+      <span>{item}</span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .icon-list :global(.check--green) {
+    color: var(--green-text);
+  }
+
+  .icon-list :global(.check--blue) {
+    color: var(--node-blue);
+  }
+</style>

@@ -1,0 +1,98 @@
+---
+import '../styles/global.css';
+// Same files the @font-face rules use; preloading them starts the download with the HTML.
+import montserratFont from '../assets/fonts/montserrat-latin-wght-normal.woff2?url';
+import cinzelFont from '../assets/fonts/cinzel-latin-400-normal.woff2?url';
+
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { site } from '../config/site';
+import { organizationSchema, serializeJsonLd } from '../lib/seo';
+
+interface Props {
+  /** Full document title. */
+  title: string;
+  description: string;
+  /** Path to a social preview image under /public. */
+  image?: string;
+  noindex?: boolean;
+  /** Extra JSON-LD objects for this page. */
+  jsonLd?: Record<string, unknown>[];
+  ogType?: 'website' | 'article';
+}
+
+const {
+  title,
+  description,
+  image = '/og-image.png',
+  noindex = false,
+  jsonLd = [],
+  ogType = 'website',
+} = Astro.props;
+
+if (!Astro.site) throw new Error('`site` must be configured in astro.config.mjs');
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const imageUrl = new URL(image, Astro.site).href;
+const structuredData = [organizationSchema(Astro.site), ...jsonLd];
+---
+
+<!doctype html>
+<html lang={site.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <link rel="preload" href={montserratFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={cinzelFont} as="font" type="font/woff2" crossorigin />
+
+    <meta name="theme-color" content="#081f3a" />
+    <meta name="color-scheme" content="light" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <script type="application/ld+json" set:html={serializeJsonLd(structuredData)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <!-- One small deferred module for every page: header menu + motion saver. -->
+    <script>
+      import { initNav } from '../scripts/nav';
+      import { pauseOffscreenMotion, revealOnScroll } from '../scripts/motion';
+      initNav('(min-width: 1024px)');
+      revealOnScroll();
+      pauseOffscreenMotion();
+    </script>
+  </body>
+</html>

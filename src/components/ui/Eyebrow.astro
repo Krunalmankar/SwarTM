@@ -1,0 +1,65 @@
+---
+/** Small uppercase label with the animated three-node brand mark. */
+interface Props {
+  as?: 'span' | 'p';
+  class?: string;
+  tone?: 'default' | 'green';
+}
+
+const { as: Tag = 'span', class: className, tone = 'default' } = Astro.props;
+---
+
+<Tag class:list={['eyebrow', `eyebrow--${tone}`, className]}>
+  <svg class="node" width="22" height="12" viewBox="0 0 22 12" aria-hidden="true" focusable="false">
+    <path d="M3 9 11 3l8 3" stroke="#adbac1" stroke-width="1.5" fill="none"></path>
+    <circle cx="3" cy="9" r="2.5" fill="#3d7ddb"></circle>
+    <circle cx="11" cy="3" r="1.8" fill="#1e4c8c"></circle>
+    <circle cx="19" cy="6" r="2.5" fill="#3d7ddb"></circle>
+  </svg>
+  <slot />
+</Tag>
+
+<style>
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+
+  .eyebrow--green {
+    color: var(--green-text);
+  }
+
+  .node {
+    display: inline-block;
+  }
+
+  .node circle {
+    animation: blip 2.4s ease-in-out infinite;
+  }
+
+  .node circle:nth-of-type(2) {
+    animation-delay: 0.4s;
+  }
+
+  .node circle:nth-of-type(3) {
+    animation-delay: 0.8s;
+  }
+
+  @keyframes blip {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+</style>

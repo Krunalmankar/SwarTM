@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../ui/Eyebrow.astro';
+import Button from '../ui/Button.astro';
+
+interface Props {
+  title: string;
+  eyebrow: string;
+  heading: string;
+  text: string;
+  primary: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+
+const { title, eyebrow, heading, text, primary, secondary } = Astro.props;
+---
+
+<BaseLayout title={title} description={text} noindex>
+  <section class="container stack gap-20 center pt-96 pb-112">
+    <Eyebrow>{eyebrow}</Eyebrow>
+    <h1 class="display-1 measure-760">{heading}</h1>
+    <p class="lead measure-620">{text}</p>
+    <div class="row gap-16 actions">
+      <Button href={primary.href} arrow>
+        {primary.label}
+      </Button>
+      {secondary && (
+        <Button href={secondary.href} variant="outline">
+          {secondary.label}
+        </Button>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .actions {
+    justify-content: center;
+    padding-top: 8px;
+  }
+</style>

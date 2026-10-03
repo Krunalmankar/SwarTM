@@ -1,0 +1,79 @@
+# =====================================================================
+# SwarTM: Apache configuration for GoDaddy (cPanel / Linux) hosting.
+# Deployed to public_html/.htaccess with the site build.
+# =====================================================================
+
+Options -Indexes -MultiViews
+ServerSignature Off
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+AddDefaultCharset utf-8
+AddCharset utf-8 .html .css .js .json .xml .txt .svg .webmanifest
+
+<IfModule mod_mime.c>
+    AddType font/woff2 .woff2
+    AddType font/woff .woff
+    AddType image/webp .webp
+    AddType image/avif .avif
+    AddType image/svg+xml .svg
+    AddType application/manifest+json .webmanifest
+</IfModule>
+
+# ---------------------------------------------------------------------
+# HTTPS and canonical host
+# ---------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Always use HTTPS.
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Use one host name. This sends bare-domain visitors to www;
+    # change both lines to match your real domain (it must equal SITE_URL).
+    # RewriteCond %{HTTP_HOST} ^swartm\.com$ [NC]
+    # RewriteRule ^ https://www.swartm.com%{REQUEST_URI} [L,R=301]
+
+    # Block hidden files and folders (.git, .env, …) except .well-known.
+    RewriteRule (^|/)\.(?!well-known(/|$)) - [F,L]
+
+    # Block source, backup and config files if they are ever uploaded by mistake.
+    RewriteRule \.(env|ini|log|sh|sql|bak|old|orig|swp|dist|lock|md|yml|yaml|ts|map)$ - [F,L,NC]
+</IfModule>
+
+# ---------------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------------
+<IfModule mod_headers.c>
+    # Only first-party resources. Inline code is allowed only if its SHA-256 hash is listed;
+    # the hash placeholders are filled in by scripts/csp-header.mjs during `npm run build`.
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' __CSP_SCRIPT_HASHES__; style-src 'self' __CSP_STYLE_HASHES__; img-src 'self'; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; manifest-src 'self'; upgrade-insecure-requests"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), browsing-topics=()"
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    Header always unset X-Powered-By
+    Header unset X-Powered-By
+
+    # Caching: HTML always revalidates; fingerprinted build assets are immutable.
+    <FilesMatch "\.(html|xml|txt)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+    <If "%{REQUEST_URI} =~ m#^/_astro/#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </If>
+    <FilesMatch "\.(png|jpe?g|webp|avif|svg|ico)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>
+
+# ---------------------------------------------------------------------
+# Compression
+# ---------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml application/xml application/javascript text/javascript application/json image/svg+xml application/manifest+json
+</IfModule>

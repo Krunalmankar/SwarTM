@@ -1,0 +1,26 @@
+order: 1
+title: Agentic VM reconciliation between vCenter and CMDB
+practice: ITOM and AI Agents
+client: Global enterprise
+service: servicenow-ai
+icon: monitorCheck
+problem: Virtual machine inventory in vCenter and VM CIs in the CMDB drifted apart, and nobody could say which records were missing on either side.
+approach: 'A scheduled four-agent workflow: inventory pulled from the data lake via Zero Copy Connector and Workflow Data Fabric, a bidirectional UUID delta, a summary report, and an emailed overview for human remediation.'
+outcome: A recurring, auditable delta report replaced manual comparison.
+flow:
+  title: How the four agents work together
+  steps:
+    - icon: database
+      title: Agent 1 · Pull
+      text: Inventory via Zero Copy Connector and Workflow Data Fabric
+    - icon: swap
+      title: Agent 2 · Compare
+      text: Bidirectional UUID delta, vCenter against CMDB
+    - icon: report
+      title: Agent 3 · Report
+      text: Delta and summary report for every cycle
+      tone: deep
+    - icon: mail
+      title: Agent 4 · Notify
+      text: Emailed overview for human remediation
+      tone: green

@@ -1,0 +1,9 @@
+order: 3
+title: Normalizing approximately 80,000 company records
+practice: CMDB, ITAM and NDS
+client: Large enterprise
+service: cmdb-health
+icon: buildingDoor
+problem: Around 80,000 company records with inconsistent names fragmented CMDB, Discovery, ITAM and SAM data.
+approach: Normalization Data Services design with canonical names, hash logic and mappings, plus a complete deployment runbook from development through test to production.
+outcome: One canonical company per vendor, ready for asset and licence reporting.

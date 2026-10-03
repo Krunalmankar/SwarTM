@@ -1,0 +1,25 @@
+# build output
+dist/
+.astro/
+
+# test output
+test-results/
+playwright-report/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment variables and server secrets
+.env
+.env.*
+!.env.example
+swartm-config.php
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

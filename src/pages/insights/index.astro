@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import InsightCard from '../../components/insights/InsightCard.astro';
+import NewsletterForm from '../../components/forms/NewsletterForm.astro';
+import { getInsights } from '../../lib/content';
+import { insightTopics } from '../../config/insights';
+
+const insights = await getInsights();
+const featured = insights.find((i) => i.data.featured);
+const rest = insights.filter((i) => i !== featured);
+// Only offer filters for topics that have at least one article.
+const topics = insightTopics.filter((topic) => insights.some((i) => i.data.topic === topic));
+---
+
+<BaseLayout
+  title="ServiceNow insights: CMDB, CSDM & AI | SwarTM"
+  description="Field notes on CMDB, CSDM, ITOM and ServiceNow AI, drawn from real implementation work."
+>
+  <PageHero
+    eyebrow="Insights"
+    title="Practical insight on ServiceNow architecture."
+    lead="Field notes on CMDB, CSDM, ITOM and ServiceNow AI, drawn from real implementation work."
+    pb="pb-40"
+  >
+    <div class="row gap-8 filters" role="group" aria-label="Filter articles by topic" data-filters>
+      <button type="button" class="filter" aria-pressed="true" data-topic="all">
+        All
+      </button>
+      {topics.map((topic) => (
+        <button type="button" class="filter" aria-pressed="false" data-topic={topic}>
+          {topic}
+        </button>
+      ))}
+    </div>
+  </PageHero>
+
+  <p class="visually-hidden" aria-live="polite" data-filter-status></p>
+
+  {featured && (
+    <section class="container pt-24 pb-40 in-view" data-filter-group>
+      <InsightCard insight={featured} variant="featured" />
+    </section>
+  )}
+
+  <section class="container pb-96 in-view" aria-label="Articles">
+    <ul class="grid grid--320 gap-24 plain-list" data-filter-group>
+      {rest.map((insight) => (
+        <li data-topic={insight.data.topic}>
+          <InsightCard insight={insight} />
+        </li>
+      ))}
+    </ul>
+    <p class="muted empty" hidden data-filter-empty>
+      No articles in this topic yet.
+    </p>
+  </section>
+
+  <section class="container pb-96 in-view">
+    <div class="card pad-40 row gap-24 justify-between newsletter">
+      <div class="stack gap-6 measure-520">
+        <h2 class="heading-3">Get new articles in your inbox</h2>
+        <p class="muted">One practical ServiceNow article each month. We never share your details.</p>
+      </div>
+      <NewsletterForm />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .filters {
+    padding-top: 8px;
+  }
+
+  .filter {
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      border-color 0.15s;
+  }
+
+  .filter:hover {
+    border-color: var(--accent-text);
+  }
+
+  .filter[aria-pressed='true'] {
+    border-color: var(--navy);
+    background: var(--navy);
+    color: var(--ink-on-dark);
+  }
+
+  .empty {
+    padding-top: 8px;
+  }
+
+  :global([data-hidden]) {
+    display: none !important;
+  }
+</style>
+
+<script>
+  const ALL = 'all';
+  const group = document.querySelector<HTMLElement>('[data-filters]');
+  const buttons = Array.from(group?.querySelectorAll<HTMLButtonElement>('button[data-topic]') ?? []);
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-filter-group] > [data-topic]'));
+  const status = document.querySelector<HTMLElement>('[data-filter-status]');
+  const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
+
+  function apply(topic: string, updateUrl: boolean) {
+    const valid = buttons.some((b) => b.dataset.topic === topic) ? topic : ALL;
+    let shown = 0;
+
+    for (const button of buttons) {
+      button.setAttribute('aria-pressed', String(button.dataset.topic === valid));
+    }
+    for (const item of items) {
+      const match = valid === ALL || item.dataset.topic === valid;
+      item.toggleAttribute('data-hidden', !match);
+      if (match) shown++;
+    }
+    if (empty) empty.hidden = shown > 0;
+    if (status) status.textContent = `${shown} article${shown === 1 ? '' : 's'} shown`;
+
+    if (updateUrl) {
+      const url = new URL(window.location.href);
+      if (valid === ALL) url.searchParams.delete('topic');
+      else url.searchParams.set('topic', valid);
+      history.replaceState(null, '', url);
+    }
+  }
+
+  for (const button of buttons) {
+    button.addEventListener('click', () => apply(button.dataset.topic ?? ALL, true));
+  }
+
+  const initial = new URL(window.location.href).searchParams.get('topic');
+  if (initial) apply(initial, false);
+</script>

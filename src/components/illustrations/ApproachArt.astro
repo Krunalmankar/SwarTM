@@ -1,0 +1,134 @@
+---
+/**
+ * Animated isometric illustration for a service's "Our approach" section.
+ * Add `<service-id>.svg` to this folder to give a service its own artwork.
+ * SVGs must not contain style="" attributes (blocked by the site's CSP);
+ * motion comes from the iso-* classes below.
+ */
+interface Props {
+  slug: string;
+}
+
+const files = import.meta.glob<string>('./*.svg', { query: '?raw', import: 'default', eager: true });
+const svg = files[`./${Astro.props.slug}.svg`];
+---
+
+{svg && <div class="approach-art-wrap" set:html={svg} />}
+
+<style>
+  .approach-art-wrap {
+    flex: 0 1 440px;
+    min-width: 0;
+  }
+
+  .approach-art-wrap :global(.approach-art) {
+    display: block;
+    max-width: 440px;
+    height: auto;
+    margin: 0 auto;
+    overflow: visible;
+    font-family: var(--font-sans);
+  }
+
+  .approach-art-wrap :global(.iso-drop) {
+    animation: iso-drop 5s cubic-bezier(0.3, 0.7, 0.3, 1) infinite;
+  }
+  .approach-art-wrap :global(.iso-orbit) {
+    animation: iso-dash 30s linear infinite;
+  }
+  .approach-art-wrap :global(.iso-flow) {
+    animation: iso-flow 2.4s linear infinite;
+  }
+  .approach-art-wrap :global(.iso-blink) {
+    animation: iso-blink 2.4s ease-in-out infinite;
+  }
+  .approach-art-wrap :global(.iso-bob) {
+    animation: iso-bob 4s ease-in-out infinite;
+  }
+  .approach-art-wrap :global(.iso-twinkle) {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: iso-twinkle 2.8s ease-in-out infinite;
+  }
+  .approach-art-wrap :global(.iso-scan) {
+    animation: iso-scan 6s ease-in-out infinite;
+  }
+  .approach-art-wrap :global(.iso-spin),
+  .approach-art-wrap :global(.iso-spin-rev) {
+    transform-box: view-box;
+    transform-origin: 0 0;
+    animation: iso-spin 14s linear infinite;
+  }
+  .approach-art-wrap :global(.iso-spin-rev) {
+    animation-duration: 10.5s;
+    animation-direction: reverse;
+  }
+
+  @keyframes iso-drop {
+    0%,
+    12% {
+      transform: translateY(-30px);
+      opacity: 0;
+    }
+    32%,
+    86% {
+      transform: none;
+      opacity: 1;
+    }
+    100% {
+      transform: none;
+      opacity: 0;
+    }
+  }
+  @keyframes iso-dash {
+    to {
+      stroke-dashoffset: -220;
+    }
+  }
+  @keyframes iso-flow {
+    to {
+      stroke-dashoffset: -34;
+    }
+  }
+  @keyframes iso-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+  @keyframes iso-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-9px);
+    }
+  }
+  @keyframes iso-twinkle {
+    0%,
+    100% {
+      transform: scale(1) rotate(0);
+    }
+    50% {
+      transform: scale(0.75) rotate(45deg);
+    }
+  }
+  @keyframes iso-scan {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(250px);
+    }
+  }
+  @keyframes iso-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

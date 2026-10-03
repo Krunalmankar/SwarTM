@@ -1,0 +1,21 @@
+---
+import Eyebrow from '../ui/Eyebrow.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  centered?: boolean;
+  /** Bottom padding class from global.css (pb-40, pb-48, pb-56 …). */
+  pb?: 'pb-40' | 'pb-48' | 'pb-56';
+}
+
+const { eyebrow, title, lead, centered = false, pb = 'pb-56' } = Astro.props;
+---
+
+<section class:list={['container stack gap-20 pt-96', pb, centered && 'center']}>
+  <Eyebrow class="reveal">{eyebrow}</Eyebrow>
+  <h1 class:list={['display-1 reveal delay-1', centered ? 'measure-820' : 'measure-760']}>{title}</h1>
+  {lead && <p class:list={['lead reveal delay-2', centered ? 'measure-640' : 'measure-620']}>{lead}</p>}
+  <slot />
+</section>

@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import SectionHeading from '../components/sections/SectionHeading.astro';
+import ContactForm from '../components/forms/ContactForm.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import type { IconName } from '../components/ui/icons';
+import { site } from '../config/site';
+
+const steps: { icon: IconName; title: string; text: string; green?: boolean }[] = [
+  {
+    icon: 'phone',
+    title: 'Discovery call',
+    text: 'A 30-minute conversation about your goals, instance and constraints, free of charge.',
+  },
+  {
+    icon: 'search',
+    title: 'Scoping & solutioning',
+    text: 'We analyse your instance and shape the solution with you, free of charge.',
+  },
+  {
+    icon: 'fileCheck',
+    title: 'Proposal',
+    text: 'A clear scope, timeline and competitive price for POC or implementation.',
+    green: true,
+  },
+];
+---
+
+<BaseLayout
+  title="Contact SwarTM | Free ServiceNow discovery call"
+  description="Book a free discovery call with SwarTM. Discovery and solutioning are free, and we respond within one working day."
+>
+  <PageHero
+    eyebrow="Get started"
+    title="Let’s identify where AI can deliver value fastest."
+    lead="Discovery and solutioning are free. Tell us about your platform and goals, and we will respond within one working day."
+    pb="pb-48"
+  />
+
+  <section class="container grid grid--380 gap-24 align-start pb-72 in-view">
+    <ContactForm />
+
+    <div class="stack gap-24">
+      <div class="card card--dark pad-32 stack gap-14">
+        <span class="icon-tile icon-tile--48 icon-tile--brand-green">
+          <Icon name="calendarCheck" />
+        </span>
+        <h2 class="heading-4">Prefer to talk?</h2>
+        {site.bookingIsExternal ? (
+          <p class="on-dark-muted">Book a free 30-minute discovery call at a time that suits you.</p>
+        ) : (
+          <p class="on-dark-muted">
+            Send your details with the form and we will arrange a free 30-minute discovery call at a time that
+            suits you.
+          </p>
+        )}
+        <div>
+          <Button href={site.bookingUrl} external={site.bookingIsExternal} arrow>
+            {site.bookingIsExternal ? 'Book a call' : 'Request a call'}
+          </Button>
+        </div>
+      </div>
+      <div class="card pad-28 row gap-12">
+        <Icon name="mapPin" size={20} class="text-accent" />
+        <span>{site.location.display}, serving clients globally</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band in-view" aria-labelledby="how-we-engage">
+    <div class="container stack gap-36 pt-96 pb-96">
+      <SectionHeading
+        eyebrow="How we engage"
+        title="From the first conversation to an agreed scope in three steps."
+        id="how-we-engage"
+      />
+      <ol class="grid grid--trio gap-24 plain-list">
+        {steps.map((step, i) => (
+          <li class="tile stack gap-12">
+            <div class="row justify-between">
+              <span
+                class:list={['icon-tile icon-tile--44 icon-tile--round', step.green && 'icon-tile--green']}
+              >
+                <Icon name={step.icon} size={22} />
+              </span>
+              <span class:list={['step-number', step.green && 'text-green']}>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+            </div>
+            <h3 class="heading-6">{step.title}</h3>
+            <p class="muted">{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <div class="spacer" aria-hidden="true"></div>
+</BaseLayout>
+
+<style>
+  .step-number {
+    font-family: var(--font-display);
+    font-size: 24px;
+    color: var(--accent-text);
+  }
+
+  .step-number.text-green {
+    color: var(--green-text);
+  }
+
+  .spacer {
+    height: 72px;
+  }
+</style>

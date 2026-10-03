@@ -1,0 +1,22 @@
+---
+import Eyebrow from '../ui/Eyebrow.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  /** `display` uses the Cinzel display face; `sans` the bold section heading. */
+  variant?: 'sans' | 'sans-lg' | 'display';
+  id?: string;
+  class?: string;
+}
+
+const { eyebrow, title, variant = 'sans', id, class: className } = Astro.props;
+const titleClass = { sans: 'heading-2', 'sans-lg': 'heading-1', display: 'display-2' }[variant];
+---
+
+<div class:list={['stack gap-10', className]}>
+  <Eyebrow>{eyebrow}</Eyebrow>
+  <h2 class={titleClass} id={id}>
+    {title}
+  </h2>
+</div>

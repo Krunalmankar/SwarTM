@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import Eyebrow from '../ui/Eyebrow.astro';
+import Icon from '../ui/Icon.astro';
+import logo from '../../assets/logo.png';
+import { insightPath, readingMinutes, type Insight } from '../../lib/content';
+
+interface Props {
+  insight: Insight;
+  variant?: 'featured' | 'default';
+}
+
+const { insight, variant = 'default' } = Astro.props;
+const { data } = insight;
+const href = insightPath(insight);
+const Tag = href ? 'a' : 'article';
+const comingSoon = !href;
+---
+
+{variant === 'featured' ? (
+  <Tag
+    class:list={['card card--dark pad-40 featured', href && 'hoverable']}
+    href={href}
+    data-topic={data.topic}
+  >
+    <div class="stack gap-14">
+      <span class="badge badge--green self-start">{comingSoon ? 'Featured · Coming soon' : 'Featured'}</span>
+      <h2 class="display-3">{data.title}</h2>
+      {data.summary && <p class="on-dark-muted">{data.summary}</p>}
+      <span class="meta on-dark-muted">
+        <Icon name="clock" size={14} />
+        {readingMinutes(insight)} min read
+      </span>
+    </div>
+    <div class="featured__art">
+      <!-- Near the top of /insights/, often the largest visible element: load it straight away. -->
+      <Image src={logo} alt="" width={320} densities={[1, 2]} loading="eager" fetchpriority="high" />
+    </div>
+  </Tag>
+) : (
+  <Tag
+    class:list={['card pad-28 stack gap-12 item', href && 'hoverable']}
+    href={href}
+    data-topic={data.topic}
+  >
+    <span class="icon-tile icon-tile--44">
+      <Icon name={data.icon} size={22} />
+    </span>
+    <Eyebrow>{data.topic}</Eyebrow>
+    <h3 class="heading-5">{data.title}</h3>
+    <span class="meta muted">
+      <Icon name="clock" size={14} />
+      {readingMinutes(insight)} min read
+      {comingSoon && <span class="badge badge--tint soon">Coming soon</span>}
+    </span>
+  </Tag>
+)}
+
+<style>
+  .featured {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+    gap: 32px;
+    align-items: center;
+  }
+
+  .featured__art {
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+    border-radius: var(--radius-md);
+    background: var(--surface-200);
+  }
+
+  .featured__art :global(img) {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+  }
+
+  .item {
+    height: 100%;
+  }
+
+  .meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    font-size: 13px;
+  }
+
+  .soon {
+    margin-left: 6px;
+  }
+</style>

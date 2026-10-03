@@ -1,0 +1,62 @@
+---
+/** "Other services" cross-links shown near the end of each service page. */
+import Eyebrow from '../ui/Eyebrow.astro';
+import Icon from '../ui/Icon.astro';
+import { getServices, servicePath } from '../../lib/content';
+
+interface Props {
+  /** id of the service page this appears on (excluded from the list). */
+  current: string;
+}
+
+const others = (await getServices()).filter((s) => s.id !== Astro.props.current);
+---
+
+<section class="container pb-96 in-view" aria-labelledby="other-services">
+  <div class="stack gap-24">
+    <div class="row gap-16 justify-between align-end">
+      <div class="stack gap-10">
+        <Eyebrow>Keep exploring</Eyebrow>
+        <h2 class="heading-3" id="other-services">
+          Other ways we help
+        </h2>
+      </div>
+      <a class="arrow-link" href="/services/">
+        All services
+        <Icon name="arrowRight" size={16} strokeWidth={2} class="arrow" />
+      </a>
+    </div>
+    <ul class="grid grid--trio gap-24 plain-list">
+      {others.map((service) => (
+        <li>
+          <a class="card pad-28 hoverable stack gap-12 other" href={servicePath(service)}>
+            <span class="icon-tile icon-tile--44">
+              <Icon name={service.data.icon} size={22} />
+            </span>
+            <span class="heading-6">{service.data.homeTitle}</span>
+            <span class="muted">{service.data.homeSummary}</span>
+            <span class="explore">
+              Explore
+              <Icon name="arrowRight" size={16} strokeWidth={2} class="arrow" />
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .other {
+    height: 100%;
+  }
+
+  .explore {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: auto;
+    color: var(--accent-text);
+    font-weight: 600;
+  }
+</style>

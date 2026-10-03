@@ -1,0 +1,124 @@
+---
+/** Horizontal step flow with a dot travelling along the connector. */
+import Icon from '../ui/Icon.astro';
+import type { IconName } from '../ui/icons';
+
+interface Props {
+  title: string;
+  steps: { icon: IconName; title: string; text: string; tone: 'tint' | 'deep' | 'green' }[];
+}
+
+const { title, steps } = Astro.props;
+---
+
+<div class="flow">
+  <h3 class="label-caps flow__title">{title}</h3>
+  <div class="flow__body">
+    <span class="flow__track" aria-hidden="true">
+      <span class="flow__dot travel"></span>
+    </span>
+    <ol class="flow__steps">
+      {steps.map((step) => (
+        <li class="flow__step">
+          <span class:list={['flow__icon', `flow__icon--${step.tone}`]}>
+            <Icon name={step.icon} size={22} />
+          </span>
+          <span class="fw-600">{step.title}</span>
+          <span class="flow__text">{step.text}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</div>
+
+<style>
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 24px 28px;
+    border-radius: var(--radius-md);
+    background: var(--surface-100);
+  }
+
+  .flow__title {
+    margin: 0;
+    color: var(--accent-text);
+  }
+
+  .flow__body {
+    position: relative;
+  }
+
+  .flow__steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .flow__track {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: 23px;
+    height: 2px;
+    background: var(--connector-grey);
+    /* Lets the travelling dot measure the track width (100cqw) and move on the GPU. */
+    container-type: inline-size;
+  }
+
+  .flow__dot {
+    top: -5px;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-full);
+    background: var(--signal-green);
+  }
+
+  .flow__step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .flow__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--surface-200);
+    border-radius: var(--radius-full);
+    box-shadow: 0 0 0 1px var(--hairline);
+    background: var(--node-tint);
+    color: var(--accent-text);
+  }
+
+  .flow__icon--deep {
+    background: var(--node-deep);
+    color: var(--ink-on-dark);
+  }
+
+  .flow__icon--green {
+    background: var(--signal-green);
+    color: var(--on-green);
+  }
+
+  .flow__text {
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--ink-muted);
+  }
+
+  /* Steps stack vertically on narrow screens, so the horizontal track no longer fits. */
+  @media (max-width: 520px) {
+    .flow__track {
+      display: none;
+    }
+  }
+</style>

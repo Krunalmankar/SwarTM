@@ -1,0 +1,76 @@
+order: 1
+flagship: true
+icon: sparkle
+shortName: ServiceNow AI
+homeTitle: ServiceNow AI
+homeSummary: Now Assist, AI agents and agentic workflows across ITSM and ITOM.
+cardTitle: ServiceNow AI consultation & implementation
+cardSummary: Now Assist, AI Agents, agentic workflows and AIOps, from use-case selection through to governed production rollout.
+tags: [Now Assist, AI Agents, AIOps, AI Control Tower]
+stack:
+  level: 3
+  caption: Now Assist · AI Agents · AIOps
+
+seo:
+  title: ServiceNow AI consultation & implementation | SwarTM
+  description: Turn Now Assist and AI Agents into business outcomes, with the data, governance and agentic workflows that let AI act safely on ServiceNow.
+
+hero:
+  title: ServiceNow AI consultation & implementation
+  lead: Turn Now Assist and AI Agents from licences into business outcomes, supported by the data, governance and workflows that allow AI to act safely.
+  cta: Book a free AI discovery
+  iconStyle: navy
+
+glance:
+  - icon: clock
+    label: 'Typical timeline:'
+    text: 8 to 14 weeks to first production use case
+  - icon: layers2
+    label: 'Covers:'
+    text: Now Assist, AI Agents, agentic workflows, AIOps, AI Control Tower
+  - icon: shieldCheck
+    label: 'Commercials:'
+    text: discovery and solutioning free; POC and implementation priced per scope
+
+problem:
+  heading: AI is enabled, but the value has not yet followed.
+  items:
+    - icon: info
+      title: Licences without use cases
+      text: Now Assist is enabled, but no one owns which skills and agents should deliver value first.
+    - icon: databaseSimple
+      title: Agents can’t act on bad data
+      text: Incomplete CMDB and weak knowledge make AI answers unreliable and actions risky.
+    - icon: shieldAlert
+      title: No governance model
+      text: Unclear who approves agents, what they can touch, and how their results are measured.
+
+approach:
+  heading: Prove one use case, then scale.
+  steps:
+    - title: Discover
+      text: Rank AI use cases by value and data readiness.
+    - title: Prepare
+      text: Fix the data, set up service accounts, ACLs and AI Control Tower governance.
+    - title: Prove
+      text: Build one agentic workflow end to end and measure it.
+    - title: Scale
+      text: Roll out to production, drive adoption, add the next use case.
+
+deliverables:
+  - Prioritised AI use-case roadmap
+  - Data-readiness assessment (CMDB, knowledge, catalog)
+  - Configured Now Assist skills
+  - AI Agents and agentic workflows in production
+  - Governance set-up in AI Control Tower
+  - Technical design document and runbooks
+
+timeline:
+  - { label: Discovery, duration: '1 to 2 weeks, free of charge', start: 0, width: 15, tone: grey }
+  - { label: Prepare & POC, duration: 3 to 4 weeks, start: 15, width: 45, tone: blue }
+  - { label: Production rollout, duration: 4 to 8 weeks, start: 60, width: 40, tone: deep }
+  - { label: Run & improve, duration: ongoing, start: 0, width: 100, tone: green }
+
+cta:
+  heading: Which AI use case should you deliver first?
+  label: Book a free AI discovery

@@ -1,0 +1,189 @@
+---
+/**
+ * Home hero graphic: the network mark inside two counter-rotating orbits,
+ * with floating capability pills. Decorative; the pill labels are also in
+ * the hero copy, so the whole graphic is hidden from screen readers.
+ */
+import { Image } from 'astro:assets';
+import Icon from '../ui/Icon.astro';
+import type { IconName } from '../ui/icons';
+import logo from '../../assets/logo.png';
+
+const pills: { label: string; icon: IconName; pos: string; motion: string; live?: boolean }[] = [
+  { label: 'Now Assist', icon: 'sparkle', pos: 'pill--1', motion: 'bob' },
+  { label: 'AI Agents', icon: 'robot', pos: 'pill--2', motion: 'bob-2', live: true },
+  { label: 'Trusted CMDB', icon: 'database', pos: 'pill--3', motion: 'bob-3' },
+  { label: 'AIOps', icon: 'pulse', pos: 'pill--4', motion: 'bob' },
+];
+---
+
+<div class="orbit-art reveal delay-2" aria-hidden="true">
+  <div class="ring ring--outer orbit">
+    <span class="ring__dot ring__dot--green"></span>
+  </div>
+  <div class="ring ring--inner orbit-rev">
+    <span class="ring__dot ring__dot--blue"></span>
+    <span class="ring__dot ring__dot--deep"></span>
+  </div>
+  <div class="core"></div>
+  <Image
+    src={logo}
+    alt=""
+    width={260}
+    densities={[1, 2]}
+    loading="eager"
+    fetchpriority="high"
+    class="mark float"
+  />
+  {pills.map((pill) => (
+    <span class:list={['pill', pill.pos, pill.motion]}>
+      <span class="pill__icon">
+        <Icon name={pill.icon} size={16} />
+      </span>
+      {pill.label}
+      {pill.live && <span class="dot dot--green blink pill__live" />}
+    </span>
+  ))}
+</div>
+
+<style>
+  .orbit-art {
+    position: relative;
+    justify-self: center;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .ring {
+    position: absolute;
+    border-radius: var(--radius-full);
+  }
+
+  .ring--outer {
+    inset: 0;
+    border: 1px dashed var(--connector-grey);
+  }
+
+  .ring--inner {
+    inset: 11%;
+    border: 1px solid var(--hairline);
+  }
+
+  .ring__dot {
+    position: absolute;
+    border-radius: var(--radius-full);
+  }
+
+  .ring__dot--green {
+    top: -7px;
+    left: calc(50% - 7px);
+    width: 14px;
+    height: 14px;
+    background: var(--signal-green);
+  }
+
+  .ring__dot--blue {
+    bottom: -6px;
+    left: calc(30% - 6px);
+    width: 12px;
+    height: 12px;
+    background: var(--node-blue);
+  }
+
+  .ring__dot--deep {
+    top: 18%;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background: var(--node-deep);
+  }
+
+  .core {
+    position: absolute;
+    inset: 21%;
+    border-radius: var(--radius-full);
+    background: var(--surface-200);
+    box-shadow: 0 30px 70px rgba(8, 31, 58, 0.12);
+  }
+
+  .orbit-art :global(.mark) {
+    position: absolute;
+    left: 25%;
+    top: 31%;
+    width: 50%;
+    height: auto;
+  }
+
+  .pill {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    padding: 8px 14px 8px 8px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-full);
+    background: var(--surface-200);
+    box-shadow: 0 10px 24px rgba(8, 31, 58, 0.1);
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 600;
+  }
+
+  .pill__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background: var(--node-tint);
+    color: var(--accent-text);
+  }
+
+  .pill__live {
+    margin-left: 2px;
+  }
+
+  .pill--1 {
+    left: -2%;
+    top: 14%;
+  }
+  .pill--2 {
+    right: -4%;
+    top: 26%;
+  }
+  .pill--3 {
+    left: 2%;
+    bottom: 16%;
+  }
+  .pill--4 {
+    right: 4%;
+    bottom: 6%;
+  }
+
+  /* Keep the pills inside the viewport on narrow phones. */
+  @media (max-width: 480px) {
+    .pill {
+      padding: 6px 10px 6px 6px;
+      font-size: 12px;
+    }
+
+    .pill__icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Top pills sit above the logo (which starts at 31%) instead of over it. */
+    .pill--1 {
+      left: 0;
+      top: 10%;
+    }
+    .pill--2 {
+      right: 0;
+      top: 18%;
+    }
+  }
+</style>

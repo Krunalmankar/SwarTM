@@ -1,0 +1,105 @@
+---
+import Icon from '../ui/Icon.astro';
+import HoneypotField from './HoneypotField.astro';
+import { site } from '../../config/site';
+import { getServices } from '../../lib/content';
+
+const services = await getServices();
+const interests = [...services.map((s) => s.data.shortName), 'Something else'];
+---
+
+<form
+  id="message"
+  class="card pad-36 stack gap-18 contact-form"
+  action={site.forms.contact}
+  method="post"
+  accept-charset="UTF-8"
+  novalidate
+  data-ajax-form
+  data-success="Thank you. We will reply within one working day."
+  aria-labelledby="contact-form-title"
+>
+  <h2 class="heading-4" id="contact-form-title">
+    Send us a message
+  </h2>
+
+  <div class="grid grid--200 gap-16">
+    <label class="field">
+      Full name
+      <input class="input" type="text" name="name" autocomplete="name" required maxlength="100" />
+    </label>
+    <label class="field">
+      Work email
+      <input class="input" type="email" name="email" autocomplete="email" required maxlength="254" />
+    </label>
+    <label class="field">
+      <span>
+        Company <span class="optional">(optional)</span>
+      </span>
+      <input class="input" type="text" name="company" autocomplete="organization" maxlength="150" />
+    </label>
+    <label class="field">
+      I’m interested in
+      <select class="input" name="interest">
+        {interests.map((interest) => (
+          <option value={interest}>{interest}</option>
+        ))}
+      </select>
+    </label>
+  </div>
+
+  <label class="field">
+    What are you trying to achieve?
+    <textarea
+      class="input"
+      name="message"
+      rows="5"
+      required
+      minlength="10"
+      maxlength="4000"
+      placeholder="A few lines about your instance, goals and timing"
+    ></textarea>
+  </label>
+
+  <HoneypotField />
+
+  <div class="row gap-16 justify-between">
+    <div class="stack gap-6 form-notes">
+      <p class="form-status">
+        We only use your details to reply to you. See our <a href="/privacy/">privacy notice</a>.
+      </p>
+      <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+    </div>
+    <button type="submit" class="btn btn--primary">
+      Send message
+      <Icon name="arrowRight" size={18} strokeWidth={2} class="arrow" />
+    </button>
+  </div>
+</form>
+
+<style>
+  .contact-form {
+    position: relative;
+  }
+
+  .grid--200 {
+    --grid-min: 200px;
+  }
+
+  .optional {
+    font-weight: 400;
+  }
+
+  .form-notes {
+    flex: 1 1 240px;
+  }
+
+  .form-status:empty {
+    display: none;
+  }
+</style>
+
+<script>
+  import { enhanceForms } from '../../scripts/forms';
+  enhanceForms();
+</script>

@@ -1,0 +1,67 @@
+---
+import HoneypotField from './HoneypotField.astro';
+import { site } from '../../config/site';
+---
+
+<form
+  class="newsletter-form"
+  action={site.forms.newsletter}
+  method="post"
+  accept-charset="UTF-8"
+  novalidate
+  data-ajax-form
+  data-success="Subscribed. Thank you!"
+  aria-label="Newsletter sign-up"
+>
+  <div class="newsletter-form__row">
+    <label class="field newsletter-form__field">
+      Work email
+      <input class="input" type="email" name="email" autocomplete="email" required maxlength="254" />
+    </label>
+    <button type="submit" class="btn btn--primary btn--sm">
+      Subscribe
+    </button>
+  </div>
+  <HoneypotField />
+  <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+</form>
+
+<style>
+  /* Takes a real share of the row, so the field and button sit side by side. */
+  .newsletter-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1 1 340px;
+    max-width: 460px;
+  }
+
+  .newsletter-form__row {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+  }
+
+  .newsletter-form__field {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  /* Very narrow phones: button below the field, full width. */
+  @media (max-width: 380px) {
+    .newsletter-form__row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .form-status:empty {
+    display: none;
+  }
+</style>
+
+<script>
+  import { enhanceForms } from '../../scripts/forms';
+  enhanceForms();
+</script>

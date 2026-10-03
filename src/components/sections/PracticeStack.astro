@@ -1,0 +1,259 @@
+---
+/**
+ * "How our practices build on each other": services stacked by `stack.level`
+ * (1 = foundation), with any `wrap` service shown beside the stack.
+ */
+import Icon from '../ui/Icon.astro';
+import type { Service } from '../../lib/content';
+
+interface Props {
+  services: Service[];
+}
+
+const { services } = Astro.props;
+const layers = services
+  .filter((s) => s.data.stack.level !== 'wrap')
+  .sort((a, b) => (a.data.stack.level as number) - (b.data.stack.level as number));
+const wrappers = services.filter((s) => s.data.stack.level === 'wrap');
+---
+
+<section class="container pb-72 in-view" aria-labelledby="practice-stack">
+  <div class="card pad-36 stack gap-24">
+    <div class="row gap-12 justify-between head">
+      <h2 class="title" id="practice-stack">
+        How our practices build on each other
+      </h2>
+      <span class="small muted">Foundation first, then AI</span>
+    </div>
+
+    <div class="body">
+      <div class="pyramid">
+        <div class="axis" aria-hidden="true">
+          <svg width="16" height="14" viewBox="0 0 16 14">
+            <path d="M8 0 16 14H0z" fill="#62d84e"></path>
+          </svg>
+          <span class="axis__line"></span>
+        </div>
+        <ol class="layers">
+          {layers.map((service, i) => (
+            <li
+              class:list={[
+                'layer-row',
+                `layer-row--${Math.min(i + 1, 5)}`,
+                'layer',
+                i > 0 && `layer-${Math.min(i + 1, 4)}`,
+              ]}
+            >
+              <span class="layer-row__icon">
+                <Icon name={service.data.icon} size={22} />
+              </span>
+              <span class="stack">
+                <span class="layer-row__title">{service.data.homeTitle}</span>
+                <span class="layer-row__caption">{service.data.stack.caption}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {wrappers.map((service) => (
+        <div class="wrap layer layer-4">
+          <span class="icon-tile icon-tile--52 icon-tile--round">
+            <Icon name={service.data.icon} size={24} />
+          </span>
+          <span class="layer-row__title">{service.data.homeTitle}</span>
+          <span class="small muted">{service.data.stack.caption}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .head {
+    align-items: baseline;
+  }
+
+  .title {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+  }
+
+  .body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .pyramid {
+    flex: 999 1 520px;
+    min-width: 0;
+    display: flex;
+    gap: 20px;
+  }
+
+  .axis {
+    flex: none;
+    width: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .axis__line {
+    flex: 1;
+    width: 2px;
+    background: var(--connector-grey);
+  }
+
+  /* Foundation is first in the DOM (read first), drawn at the bottom. */
+  .layers {
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .layer-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 18px 24px;
+    border-radius: var(--radius-md);
+    background: var(--node-tint);
+    color: var(--ink);
+  }
+
+  .layer-row__icon {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--surface-200);
+    color: var(--accent-text);
+  }
+
+  .layer-row__title {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+  }
+
+  .layer-row__caption {
+    font-size: 13px;
+    line-height: 19px;
+    color: var(--ink-muted);
+  }
+
+  .layer-row--2 {
+    width: 84%;
+    background: var(--node-deep);
+    color: var(--ink-on-dark);
+  }
+
+  .layer-row--2 .layer-row__icon {
+    background: var(--navy);
+    color: var(--ink-on-dark);
+  }
+
+  .layer-row--2 .layer-row__caption {
+    color: var(--node-tint);
+  }
+
+  .layer-row--3,
+  .layer-row--4,
+  .layer-row--5 {
+    background: var(--navy);
+    color: var(--ink-on-dark);
+  }
+
+  .layer-row--3 {
+    width: 68%;
+  }
+  .layer-row--4 {
+    width: 56%;
+  }
+  .layer-row--5 {
+    width: 44%;
+  }
+
+  :is(.layer-row--3, .layer-row--4, .layer-row--5) .layer-row__icon {
+    background: var(--node-deep);
+    color: var(--signal-green);
+  }
+
+  :is(.layer-row--3, .layer-row--4, .layer-row--5) .layer-row__caption {
+    color: var(--ink-muted-on-dark);
+  }
+
+  /* Very narrow phones: the arrow column gives its space to the text. */
+  @media (max-width: 420px) {
+    .axis {
+      display: none;
+    }
+  }
+
+  .wrap {
+    flex: 1 1 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    border: 2px dashed var(--border-strong);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .layer-row {
+      padding: 14px 16px;
+      gap: 12px;
+    }
+
+    .pyramid {
+      gap: 12px;
+    }
+
+    .layer-row__icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .layer-row__title {
+      font-size: 16px;
+      line-height: 22px;
+    }
+
+    .layer-row > .stack {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    /* Keep the stepped shape, but leave room for the text. */
+    .layer-row--2 {
+      width: 94%;
+    }
+    .layer-row--3 {
+      width: 88%;
+    }
+    .layer-row--4 {
+      width: 82%;
+    }
+    .layer-row--5 {
+      width: 76%;
+    }
+  }
+</style>

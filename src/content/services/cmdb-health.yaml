@@ -1,0 +1,74 @@
+order: 3
+icon: database
+shortName: CMDB health & data
+homeTitle: CMDB health & data
+homeSummary: Certified, complete configuration data that AI can trust.
+cardTitle: CMDB health & data
+cardSummary: Discovery, Service Mapping, normalization and certification that make your CMDB trustworthy and ready to support every AI use case.
+tags: [Discovery, Service Mapping, NDS, CMDB Health]
+stack:
+  level: 2
+  caption: Discovery · Service Mapping · NDS · certification
+
+seo:
+  title: CMDB health & data | SwarTM
+  description: A complete, correct and certified ServiceNow CMDB that every ITOM process and AI agent can depend on. Discovery, Service Mapping and NDS.
+
+hero:
+  title: CMDB health & data
+  lead: A complete, correct and certified CMDB that every ITOM process and AI agent can depend on.
+  cta: Get a free CMDB health check
+
+glance:
+  - icon: clock
+    label: 'Typical timeline:'
+    text: 8 to 14 weeks to a governed CMDB
+  - icon: layers2
+    label: 'Covers:'
+    text: Discovery, Service Mapping, IRE, NDS normalization, CMDB Health, CSDM
+  - icon: sparkle
+    label: 'AI inside:'
+    text: agentic workflows that validate attributes and monitor Discovery
+
+problem:
+  heading: If people don’t trust the CMDB, AI can’t either.
+  items:
+    - icon: listSearch
+      title: Missing critical attributes
+      text: CIs without owners, support groups or environments break routing, impact analysis and reporting.
+    - icon: copy
+      title: Duplicates and messy names
+      text: Unnormalized company and vendor names fragment CMDB, ITAM and SAM data.
+    - icon: searchAlert
+      title: Silent drift
+      text: Discovery failures and stale CIs go unnoticed until an outage or audit finds them.
+
+approach:
+  heading: Measure the gaps, fix them at the source and automate the controls.
+  steps:
+    - title: Baseline
+      text: CMDB Health scores for completeness, correctness and compliance.
+    - title: Fix the sources
+      text: Discovery, Service Mapping, IRE rules and NDS normalization.
+    - title: Automate
+      text: Agentic workflows raise certification tasks and report Discovery health daily.
+    - title: Govern
+      text: Clear ownership, policies and a monthly health review.
+
+deliverables:
+  - CMDB health baseline report
+  - CSDM-aligned class and relationship model
+  - Discovery and Service Mapping configuration
+  - Company normalization with NDS
+  - Automated attribute validation and certification
+  - CMDB governance playbook
+
+timeline:
+  - { label: Health baseline, duration: '2 weeks, free of charge', start: 0, width: 15, tone: grey }
+  - { label: Source remediation, duration: 4 to 8 weeks, start: 15, width: 50, tone: blue }
+  - { label: Automation, duration: 3 to 4 weeks, start: 65, width: 25, tone: deep }
+  - { label: Governance, duration: ongoing, start: 0, width: 100, tone: green }
+
+cta:
+  heading: How healthy is your CMDB today?
+  label: Get a free health check

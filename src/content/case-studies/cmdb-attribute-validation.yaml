@@ -1,0 +1,9 @@
+order: 2
+title: Automated CMDB attribute validation and certification
+practice: CMDB and agentic workflow
+client: Enterprise IT
+service: cmdb-health
+icon: databaseCheck
+problem: Missing critical CI attributes reduced CMDB accuracy and undermined IT operations.
+approach: A “Required Attribute Validation” agentic workflow that reads the CMDB Health completeness policy, raises certification tasks to owner groups, and emails a cycle summary to governance.
+outcome: Gaps are found and routed to the right owners automatically.

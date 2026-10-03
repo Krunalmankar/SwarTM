@@ -1,0 +1,62 @@
+# Builds on every push and pull request. On pushes to main it also deploys to
+# GoDaddy over FTPS, if the FTP secrets are configured in the repository settings:
+#   FTP_SERVER, FTP_USERNAME, FTP_PASSWORD   (cPanel > FTP Accounts)
+# and the repository variable SITE_URL (e.g. https://www.swartm.com).
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: ${{ vars.SITE_URL || 'https://www.swartm.com' }}
+      PUBLIC_BOOKING_URL: ${{ vars.PUBLIC_BOOKING_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          include-hidden-files: true
+          retention-days: 7
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Upload to GoDaddy over FTPS
+        if: ${{ env.FTP_SERVER != '' }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/
+          server-dir: ./public_html/

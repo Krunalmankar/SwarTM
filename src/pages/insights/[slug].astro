@@ -1,0 +1,143 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/ui/Eyebrow.astro';
+import Icon from '../../components/ui/Icon.astro';
+import CtaBand from '../../components/sections/CtaBand.astro';
+import { getInsights, isPublished, readingMinutes, type Insight } from '../../lib/content';
+import { breadcrumbSchema } from '../../lib/seo';
+import { site as siteConfig } from '../../config/site';
+
+/** Only published articles get a page. */
+export const getStaticPaths = (async () => {
+  const insights = (await getInsights()).filter(isPublished);
+  return insights.map((insight) => ({ params: { slug: insight.id }, props: { insight } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  insight: Insight;
+}
+
+const { insight } = Astro.props;
+const { data } = insight;
+const { Content } = await render(insight);
+const site = Astro.site!;
+const path = `/insights/${insight.id}/`;
+const description = data.summary ?? `${data.title}. Field notes on ${data.topic} from ${siteConfig.name}.`;
+const dateFormat = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long' });
+---
+
+<BaseLayout
+  title={`${data.title} | SwarTM Insights`}
+  description={description}
+  ogType="article"
+  jsonLd={[
+    breadcrumbSchema(site, [
+      { name: 'Home', path: '/' },
+      { name: 'Insights', path: '/insights/' },
+      { name: data.title, path },
+    ]),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: data.title,
+      description,
+      datePublished: data.publishDate?.toISOString(),
+      dateModified: (data.updatedDate ?? data.publishDate)?.toISOString(),
+      author: { '@id': new URL('/#organization', site).href },
+      publisher: { '@id': new URL('/#organization', site).href },
+      mainEntityOfPage: new URL(path, site).href,
+    },
+  ]}
+>
+  <article class="container article pt-96 pb-96">
+    <header class="stack gap-20">
+      <a class="back" href="/insights/">
+        &larr; All insights
+      </a>
+      <Eyebrow>{data.topic}</Eyebrow>
+      <h1 class="display-1">{data.title}</h1>
+      {data.summary && <p class="lead">{data.summary}</p>}
+      <p class="row gap-16 muted small">
+        {data.publishDate && (
+          <time datetime={data.publishDate.toISOString()}>{dateFormat.format(data.publishDate)}</time>
+        )}
+        <span class="row gap-6">
+          <Icon name="clock" size={14} />
+          {readingMinutes(insight)} min read
+        </span>
+      </p>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+
+  <CtaBand heading="Want help applying this on your instance?" label="Book a free session" />
+</BaseLayout>
+
+<style>
+  .article {
+    max-width: 800px;
+  }
+
+  .back {
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .prose {
+    padding-top: 40px;
+    font-size: 17px;
+    line-height: 30px;
+  }
+
+  .prose :global(h2) {
+    margin: 40px 0 12px;
+    font-size: 26px;
+    line-height: 34px;
+    font-weight: 600;
+  }
+
+  .prose :global(h3) {
+    margin: 28px 0 8px;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 18px;
+  }
+
+  .prose :global(code) {
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    background: var(--node-tint);
+    font-size: 0.9em;
+  }
+
+  .prose :global(pre) {
+    overflow-x: auto;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    background: var(--navy);
+    color: var(--ink-on-dark);
+  }
+
+  .prose :global(blockquote) {
+    margin: 0 0 18px;
+    padding-left: 16px;
+    border-left: 3px solid var(--node-blue);
+    color: var(--ink-muted);
+  }
+
+  .prose :global(img) {
+    height: auto;
+    border-radius: var(--radius-md);
+  }
+</style>

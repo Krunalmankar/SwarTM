@@ -1,0 +1,14 @@
+---
+/**
+ * Spam protection. `website` is a honeypot people never see or fill in;
+ * `elapsed_ms` is set by script so the server can reject instant bot posts.
+ */
+---
+
+<div class="hp-field" aria-hidden="true">
+  <label>
+    Leave this field empty
+    <input type="text" name="website" tabindex="-1" autocomplete="off" />
+  </label>
+</div>
+<input type="hidden" name="elapsed_ms" value="" data-elapsed />

@@ -1,0 +1,74 @@
+order: 2
+icon: layers
+shortName: Implementation & consultation
+homeTitle: Implementation & consulting
+homeSummary: ITSM, ITOM, CSDM, CMDB and IRM, designed and delivered to platform best practice.
+cardTitle: ServiceNow implementation & consultation
+cardSummary: New implementations, re-implementations and expert advisory across the core platform.
+tags: [ITSM, ITOM, CSDM, CMDB, IRM]
+stack:
+  level: 1
+  caption: ITSM · ITOM · CSDM · IRM · integrations, out-of-the-box first
+
+seo:
+  title: ServiceNow implementation & consultation | SwarTM
+  description: ITSM, ITOM, CSDM, CMDB and IRM implemented out-of-the-box first and connected by a clean data model, ready for AI from day one.
+
+hero:
+  title: ServiceNow implementation & consultation
+  lead: ITSM, ITOM, CSDM, CMDB and IRM implemented with an out-of-the-box first approach and connected by a clean data model, ready for AI from day one.
+  cta: Discuss your project
+
+glance:
+  - icon: clock
+    label: 'Typical timeline:'
+    text: 10 to 20 weeks per module wave
+  - icon: layers2
+    label: 'Covers:'
+    text: ITSM, ITOM, CSDM, CMDB, IRM, CSM, ITAM, Integrations
+  - icon: users
+    label: 'Engagement:'
+    text: fixed-scope project or architect-led advisory
+
+problem:
+  heading: Modules are live, but they do not work as one platform.
+  items:
+    - icon: wrench
+      title: Heavy customisation
+      text: Custom code where out-of-the-box would do makes every upgrade slow and risky.
+    - icon: unlink
+      title: Disconnected data
+      text: Without CSDM, incidents, changes and services don’t link to the CIs and offerings they affect.
+    - icon: info
+      title: Value stuck after go-live
+      text: Teams use a fraction of what they licensed, and AI features have nothing solid to build on.
+
+approach:
+  heading: Out-of-the-box first, CSDM throughout.
+  steps:
+    - title: Assess & design
+      text: Current-state review and a CSDM-aligned solution design.
+    - title: Configure
+      text: Build with platform capabilities first; customise only with a reason.
+    - title: Test & deploy
+      text: Structured migration from development to test to production, with UAT support.
+    - title: Hand over
+      text: Training, documentation and hypercare for your team.
+
+deliverables:
+  - Solution design document
+  - CSDM-aligned service and data model
+  - 'Configured modules: ITSM, ITOM, IRM and more'
+  - Enterprise integrations
+  - Test scripts and UAT support
+  - Technical documentation, runbooks and training
+
+timeline:
+  - { label: Assess & design, duration: 2 to 3 weeks, start: 0, width: 15, tone: grey }
+  - { label: Configure, duration: 6 to 12 weeks, start: 15, width: 55, tone: blue }
+  - { label: Test & go-live, duration: 2 to 4 weeks, start: 70, width: 20, tone: deep }
+  - { label: Hypercare, duration: 2 weeks, start: 90, width: 10, tone: green }
+
+cta:
+  heading: Planning a new module or a clean re-implementation?
+  label: Discuss your project

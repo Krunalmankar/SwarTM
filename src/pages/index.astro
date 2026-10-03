@@ -1,0 +1,305 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroOrbit from '../components/sections/HeroOrbit.astro';
+import Button from '../components/ui/Button.astro';
+import ArrowLink from '../components/ui/ArrowLink.astro';
+import Icon from '../components/ui/Icon.astro';
+import CheckList from '../components/ui/CheckList.astro';
+import SectionHeading from '../components/sections/SectionHeading.astro';
+import CtaBand from '../components/sections/CtaBand.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import type { IconName } from '../components/ui/icons';
+import { site } from '../config/site';
+import { getServices, servicePath } from '../lib/content';
+
+const services = await getServices();
+
+const steps: { step: string; title: string; icon: IconName; free: boolean; points: string[] }[] = [
+  {
+    step: 'Step 01',
+    title: 'Solutioning & Analysis',
+    icon: 'searchPlus',
+    free: true,
+    points: [
+      'Platform, CMDB and AI-readiness review',
+      'Prioritised AI use-case shortlist',
+      'Target architecture and roadmap',
+    ],
+  },
+  {
+    step: 'Step 02',
+    title: 'Proof of Concept',
+    icon: 'flask',
+    free: false,
+    points: [
+      'One or two priority use cases on your instance',
+      'Success criteria agreed up front',
+      'Evidence-based decision to proceed',
+    ],
+  },
+  {
+    step: 'Step 03',
+    title: 'Implementation',
+    icon: 'rocket',
+    free: false,
+    points: [
+      'Phased build, integration and testing',
+      'Governance, hand-over and training',
+      'Hypercare after go-live',
+    ],
+  },
+];
+
+const reasons: { icon: IconName; title: string; text: string }[] = [
+  {
+    icon: 'sparkle',
+    title: 'AI specialists',
+    text: 'A dedicated ServiceNow AI focus rather than a generalist bench.',
+  },
+  { icon: 'databaseSimple', title: 'Foundation-first', text: 'AI built on data that holds up under audit.' },
+  { icon: 'users', title: 'Architect-led', text: 'Senior architects shape every engagement.' },
+  { icon: 'wallet', title: 'Clear pricing', text: 'Free assessment, competitive build quotes.' },
+];
+---
+
+<BaseLayout title={`${site.name} | ${site.tagline}`} description={site.description}>
+  <!-- Hero -->
+  <section class="container grid grid--440 gap-56 align-center pt-96 pb-112 hero">
+    <div class="stack gap-24">
+      <span class="pill reveal">
+        <span class="dot dot--green blink"></span>
+        {site.tagline}
+      </span>
+      <h1 class="display-hero reveal delay-1">Make ServiceNow your AI‑native platform.</h1>
+      <p class="lead measure-520 reveal delay-2">
+        We design, build and run AI-ready ServiceNow platforms. Trusted CMDB data, agentic workflows and Now
+        Assist help your teams resolve more with less effort.
+      </p>
+      <div class="row gap-16 hero__actions reveal delay-3">
+        <Button href="/contact/" arrow>
+          Book a consultation
+        </Button>
+        <Button href="/services/" variant="outline">
+          Explore services
+        </Button>
+      </div>
+    </div>
+    <HeroOrbit />
+  </section>
+
+  <!-- What we do -->
+  <section class="band in-view" aria-labelledby="what-we-do">
+    <div class="container stack gap-48 pt-96 pb-96">
+      <div class="row gap-24 align-end justify-between">
+        <SectionHeading
+          eyebrow="What we do"
+          title="ServiceNow first, with AI wherever it adds value."
+          variant="sans-lg"
+          id="what-we-do"
+          class="measure-640"
+        />
+        <ArrowLink href="/services/">All services</ArrowLink>
+      </div>
+      <ul class="grid grid--quad gap-24 plain-list">
+        {services.map((service) => (
+          <li>
+            <a class="card card--muted pad-28 hoverable stack gap-14 fill" href={servicePath(service)}>
+              <span class="icon-tile icon-tile--48">
+                <Icon name={service.data.icon} />
+              </span>
+              <span class="heading-6">{service.data.homeTitle}</span>
+              <span class="muted">{service.data.homeSummary}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Engagement model -->
+  <section class="container stack gap-40 pt-96 pb-96" aria-labelledby="engagement">
+    <SectionHeading
+      eyebrow="Our engagement model"
+      title="Start with clarity. Invest only when we build."
+      variant="display"
+      id="engagement"
+      class="measure-720"
+    />
+
+    <div class="offer reveal">
+      <div class="stack gap-14 offer__copy">
+        <span class="label-caps offer__kicker">Special offer</span>
+        <h3 class="display-4">Free solutioning &amp; analysis</h3>
+        <p class="on-dark-muted offer__text">
+          We assess your platform, data foundation and AI readiness, then provide a prioritised use-case
+          shortlist and roadmap at no cost and with no obligation.
+        </p>
+      </div>
+      <div class="offer__seal" aria-hidden="true">
+        <div class="offer__badge pop">
+          <span class="offer__free">FREE</span>
+          <span class="offer__note">No obligation</span>
+        </div>
+      </div>
+    </div>
+
+    <ol class="grid grid--trio gap-24 plain-list">
+      {steps.map((s) => (
+        <li class:list={['card pad-28 stack gap-16', s.free && 'card--featured']}>
+          <div class="row gap-12 justify-between">
+            <span class:list={['label-caps', s.free ? 'text-green' : 'text-accent']}>{s.step}</span>
+            <span class:list={['badge badge--caps', s.free ? 'badge--green' : 'badge--tint']}>
+              {s.free ? 'Free' : 'Chargeable'}
+            </span>
+          </div>
+          <span class="icon-tile icon-tile--48">
+            <Icon name={s.icon} />
+          </span>
+          <h3 class="display-card">{s.title}</h3>
+          <CheckList items={s.points} tone={s.free ? 'green' : 'blue'} size="sm" class="muted" />
+        </li>
+      ))}
+    </ol>
+
+    <p class="row gap-10 align-start muted small note">
+      <Icon name="info" size={18} class="text-accent" />
+      <span>Proof of concept and implementation are quoted per scope at competitive market pricing.</span>
+    </p>
+
+    <div class="stack gap-24 why">
+      <Eyebrow>Why SwarTM</Eyebrow>
+      <ul class="grid grid--quad gap-28 plain-list">
+        {reasons.map((r) => (
+          <li class="stack gap-10">
+            <span class="icon-tile icon-tile--44">
+              <Icon name={r.icon} size={22} />
+            </span>
+            <h3 class="heading-6">{r.title}</h3>
+            <p class="muted">{r.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand
+    size="lg"
+    decorated
+    heading="Ready to begin your ServiceNow AI transformation?"
+    text="Book a free 30-minute discovery call and we will identify your fastest route to value."
+    label="Book a consultation"
+  />
+</BaseLayout>
+
+<style>
+  /* The rotating orbit is a square box; clip its invisible corners so they never
+     widen the page. Vertical overflow (floating pills) stays visible. */
+  .hero {
+    overflow-x: clip;
+  }
+
+  .pill {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-full);
+    background: var(--surface-200);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+  }
+
+  .hero__actions {
+    padding-top: 8px;
+  }
+
+  .fill {
+    height: 100%;
+  }
+
+  .offer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 44px 48px;
+    border-radius: var(--radius-md);
+    background: var(--navy);
+    color: var(--ink-on-dark);
+  }
+
+  .offer__copy {
+    flex: 1 1 420px;
+  }
+
+  .offer__kicker {
+    color: var(--signal-green);
+  }
+
+  .offer__text {
+    font-size: 17px;
+    line-height: 27px;
+  }
+
+  .offer__seal {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 148px;
+    height: 148px;
+    border: 2px dashed var(--signal-green);
+    border-radius: var(--radius-full);
+  }
+
+  .offer__badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 120px;
+    height: 120px;
+    border-radius: var(--radius-full);
+    background: var(--signal-green);
+    color: var(--on-green);
+  }
+
+  .offer__free {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 34px;
+    font-weight: 600;
+  }
+
+  .offer__note {
+    font-size: 10px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .note {
+    font-size: 14px;
+  }
+
+  .why {
+    padding-top: 40px;
+    border-top: 1px solid var(--hairline);
+  }
+
+  @media (max-width: 600px) {
+    .offer {
+      padding: 32px 24px;
+    }
+
+    .offer__copy {
+      flex-basis: 100%;
+    }
+  }
+</style>

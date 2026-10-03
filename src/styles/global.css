@@ -1,0 +1,1133 @@
+/*
+ * SwarTM global styles: base, layout primitives, shared components, motion.
+ * Component-specific styles live in each component's <style> block.
+ */
+@import './fonts.css';
+@import './tokens.css';
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Jump links and keyboard focus stop below the sticky header, never under it. */
+  scroll-padding-top: 96px;
+  /* Safety net: decorative motion (rotating orbits etc.) must never make the page
+     scroll sideways on phones. Real layout overflow is still caught by the tests. */
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-100);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+main:focus {
+  outline: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+svg {
+  flex: none;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+/*
+ * Note: no `text-wrap: balance/pretty`. On Android phones with enlarged text
+ * (Chrome "Text scaling") they let lines run wider than their box, so text was
+ * cut off at the screen edges. Long words may break rather than overflow.
+ */
+h1,
+h2,
+h3,
+p,
+li {
+  overflow-wrap: break-word;
+}
+
+a {
+  color: var(--accent-text);
+}
+
+a:hover {
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring, var(--accent-text));
+  outline-offset: 2px;
+}
+
+/* Controls inside dark navy areas: a white focus ring (16:1) instead of dark blue (2:1).
+   A dark card that is itself the link keeps the blue ring, drawn on the light page. */
+:is(.card--dark, .cta-band, .offer, .site-footer) :focus-visible {
+  --focus-ring: #ffffff;
+}
+
+strong {
+  font-weight: 600;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 100;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: var(--navy);
+  color: var(--ink-on-dark);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 16px;
+  color: var(--ink-on-dark);
+}
+
+/* ---------- Layout ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.band {
+  background: var(--surface-200);
+  border-block: 1px solid var(--hairline);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 280px)), 1fr));
+  gap: var(--grid-gap, 24px);
+}
+
+.grid--220 {
+  --grid-min: 220px;
+}
+.grid--240 {
+  --grid-min: 240px;
+}
+.grid--250 {
+  --grid-min: 250px;
+}
+.grid--280 {
+  --grid-min: 280px;
+}
+.grid--300 {
+  --grid-min: 300px;
+}
+.grid--320 {
+  --grid-min: 320px;
+}
+.grid--380 {
+  --grid-min: 380px;
+}
+.grid--420 {
+  --grid-min: 420px;
+}
+.grid--440 {
+  --grid-min: 440px;
+}
+.grid--480 {
+  --grid-min: 480px;
+}
+/*
+ * Balanced rows for fixed item counts (no single orphan card on tablets).
+ * trio (3 items): 1 column → 2 columns with the 3rd spanning the row → 3 columns.
+ * quad (4 items): 1 column → 2×2 → 4 columns.
+ */
+.grid--trio,
+.grid--quad {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 600px) {
+  .grid--trio {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid--trio > :nth-child(3):last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 900px) {
+  .grid--trio {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid--trio > :nth-child(3):last-child {
+    grid-column: auto;
+  }
+}
+
+@media (min-width: 520px) {
+  .grid--quad {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1000px) {
+  .grid--quad {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.grid--520 {
+  --grid-min: 520px;
+}
+
+.gap-6 {
+  gap: 6px;
+  --grid-gap: 6px;
+}
+.gap-8 {
+  gap: 8px;
+  --grid-gap: 8px;
+}
+.gap-10 {
+  gap: 10px;
+  --grid-gap: 10px;
+}
+.gap-12 {
+  gap: 12px;
+  --grid-gap: 12px;
+}
+.gap-14 {
+  gap: 14px;
+  --grid-gap: 14px;
+}
+.gap-16 {
+  gap: 16px;
+  --grid-gap: 16px;
+}
+.gap-18 {
+  gap: 18px;
+  --grid-gap: 18px;
+}
+.gap-20 {
+  gap: 20px;
+  --grid-gap: 20px;
+}
+.gap-24 {
+  gap: 24px;
+  --grid-gap: 24px;
+}
+.gap-28 {
+  gap: 28px;
+  --grid-gap: 28px;
+}
+.gap-32 {
+  gap: 32px;
+  --grid-gap: 32px;
+}
+.gap-36 {
+  gap: 36px;
+  --grid-gap: 36px;
+}
+.gap-40 {
+  gap: 40px;
+  --grid-gap: 40px;
+}
+.gap-48 {
+  gap: 48px;
+  --grid-gap: 48px;
+}
+.gap-56 {
+  gap: 56px;
+  --grid-gap: 56px;
+}
+
+/* Vertical section rhythm (matches the design's section paddings) */
+.pt-0 {
+  padding-top: 0;
+}
+.pt-24 {
+  padding-top: 24px;
+}
+.pt-72 {
+  padding-top: 72px;
+}
+.pt-96 {
+  padding-top: 96px;
+}
+.pb-40 {
+  padding-bottom: 40px;
+}
+.pb-48 {
+  padding-bottom: 48px;
+}
+.pb-56 {
+  padding-bottom: 56px;
+}
+.pb-72 {
+  padding-bottom: 72px;
+}
+.pb-88 {
+  padding-bottom: 88px;
+}
+.pb-96 {
+  padding-bottom: 96px;
+}
+.pb-112 {
+  padding-bottom: 112px;
+}
+
+@media (max-width: 600px) {
+  .pt-72,
+  .pt-96 {
+    padding-top: 64px;
+  }
+  .pb-72,
+  .pb-88,
+  .pb-96,
+  .pb-112 {
+    padding-bottom: 64px;
+  }
+}
+
+.measure-520 {
+  max-width: 520px;
+}
+.measure-560 {
+  max-width: 560px;
+}
+.measure-620 {
+  max-width: 620px;
+}
+.measure-640 {
+  max-width: 640px;
+}
+.measure-720 {
+  max-width: 720px;
+}
+.measure-760 {
+  max-width: 760px;
+}
+.measure-820 {
+  max-width: 820px;
+}
+
+.center {
+  align-items: center;
+  text-align: center;
+}
+
+/* Centred text gets a definite width (up to its measure) instead of shrink-to-fit,
+   so enlarged text on phones always wraps inside the screen. */
+.center > :where(h1, h2, h3, p) {
+  width: 100%;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+.align-end {
+  align-items: flex-end;
+}
+.align-center {
+  align-items: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.self-start {
+  align-self: flex-start;
+}
+
+/* ---------- Typography ---------- */
+.display-1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+.display-hero {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+}
+
+.display-2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 3.6vw, 2.75rem);
+  line-height: 1.2;
+}
+
+.display-3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 38px;
+}
+
+.display-4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 40px;
+}
+
+.display-card {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.heading-1 {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 600;
+}
+.heading-2 {
+  font-size: 30px;
+  line-height: 38px;
+  font-weight: 600;
+}
+.heading-3 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+.heading-4 {
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 600;
+}
+.heading-5 {
+  font-size: 19px;
+  line-height: 27px;
+  font-weight: 600;
+}
+.heading-6 {
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .heading-1,
+  .heading-2,
+  .display-3,
+  .display-4 {
+    font-size: 26px;
+    line-height: 34px;
+  }
+}
+
+.lead {
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--ink-muted);
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+.text-accent {
+  color: var(--accent-text);
+}
+.text-green {
+  color: var(--green-text);
+}
+.on-dark-muted {
+  color: var(--ink-muted-on-dark);
+}
+.small {
+  font-size: 13px;
+}
+.caption {
+  font-size: 12px;
+  line-height: 16px;
+}
+.fw-600 {
+  font-weight: 600;
+}
+
+.numeral {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--accent-text);
+}
+
+.label-caps {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- Buttons & links ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+/* Lift effects only on devices that can really hover (no "stuck" hover after a tap). */
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-btn);
+    filter: brightness(1.05);
+  }
+}
+
+.btn:active {
+  filter: brightness(0.96);
+}
+
+.btn--primary {
+  background: var(--signal-green);
+  color: var(--on-green);
+}
+
+.btn--primary:hover {
+  color: var(--on-green);
+}
+
+.btn--outline {
+  background: var(--surface-200);
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.btn--outline:hover {
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+}
+
+.btn--sm {
+  min-height: 44px;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.btn[disabled] {
+  opacity: 0.7;
+  cursor: progress;
+  transform: none;
+}
+
+.arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+}
+
+@media (hover: hover) {
+  a:hover .arrow,
+  button:hover .arrow {
+    transform: translateX(4px);
+  }
+}
+
+/* ---------- Surfaces ---------- */
+.card {
+  background: var(--surface-200);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+}
+
+.card--muted {
+  background: var(--surface-100);
+}
+
+.card--dark {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--ink-on-dark);
+}
+
+.card--featured {
+  border: 2px solid var(--signal-green);
+}
+
+.card--dashed {
+  border: 1px dashed var(--border-strong);
+}
+
+.pad-24 {
+  padding: 24px;
+}
+.pad-28 {
+  padding: 28px;
+}
+.pad-32 {
+  padding: 32px;
+}
+.pad-36 {
+  padding: 36px;
+}
+.pad-40 {
+  padding: 40px;
+}
+
+@media (max-width: 600px) {
+  .pad-32,
+  .pad-36,
+  .pad-40 {
+    padding: 24px;
+  }
+}
+
+a.card {
+  text-decoration: none;
+}
+
+.hoverable {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s;
+}
+
+@media (hover: hover) {
+  .hoverable:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--node-blue);
+  }
+}
+
+.tile {
+  background: var(--surface-100);
+  border: 1px solid var(--surface-100);
+  border-radius: var(--radius-md);
+  padding: 28px;
+}
+
+/* Icon tile: square with a tinted background */
+.icon-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: var(--node-tint);
+  color: var(--accent-text);
+  transition:
+    background-color 0.25s,
+    color 0.25s,
+    transform 0.25s;
+}
+
+.icon-tile--40 {
+  width: 40px;
+  height: 40px;
+}
+.icon-tile--44 {
+  width: 44px;
+  height: 44px;
+}
+.icon-tile--48 {
+  width: 48px;
+  height: 48px;
+}
+.icon-tile--52 {
+  width: 52px;
+  height: 52px;
+}
+.icon-tile--56 {
+  width: 56px;
+  height: 56px;
+}
+.icon-tile--round {
+  border-radius: var(--radius-full);
+}
+.icon-tile--green {
+  background: var(--green-tint);
+  color: var(--green-text);
+}
+.icon-tile--brand {
+  background: var(--node-deep);
+  color: var(--ink-on-dark);
+}
+.icon-tile--navy {
+  background: var(--navy);
+  color: var(--signal-green);
+}
+.icon-tile--brand-green {
+  background: var(--node-deep);
+  color: var(--signal-green);
+}
+.icon-tile--muted {
+  background: var(--surface-100);
+  color: var(--ink-muted);
+}
+
+/* Hover feedback only on things that are actually clickable (.hoverable links). */
+@media (hover: hover) {
+  .hoverable:hover .icon-tile:not(.icon-tile--brand):not(.icon-tile--navy) {
+    background: var(--node-deep);
+    color: var(--ink-on-dark);
+    transform: rotate(-6deg) scale(1.06);
+  }
+}
+
+.tile {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s;
+}
+
+.tile-icon {
+  transition: transform 0.25s ease;
+}
+
+/* ---------- Chips & badges ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.chip--lg {
+  padding: 4px 12px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.badge--green {
+  background: var(--signal-green);
+  color: var(--on-green);
+}
+.badge--tint {
+  background: var(--node-tint);
+  color: var(--accent-text);
+}
+.badge--caps {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: var(--radius-full);
+}
+
+.dot--green {
+  background: var(--signal-green);
+}
+.dot--blue {
+  background: var(--node-blue);
+}
+.dot--deep {
+  background: var(--node-deep);
+}
+
+/* ---------- Lists ---------- */
+.plain-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.icon-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.icon-list li > svg {
+  margin-top: 2px;
+}
+
+.icon-list--tight li {
+  gap: 10px;
+}
+
+.icon-list--tight li > svg {
+  margin-top: 3px;
+}
+
+/* ---------- Forms ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+.input {
+  min-height: 44px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-200);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+textarea.input {
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.form-status {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-muted);
+}
+
+.form-status[data-state='error'] {
+  color: var(--danger);
+}
+
+.form-status[data-state='success'] {
+  color: var(--green-text);
+  font-weight: 600;
+}
+
+/* Spam trap: invisible to people, still in the DOM for bots */
+.hp-field {
+  position: absolute !important;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ---------- Motion ---------- */
+@keyframes sw-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sw-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes sw-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes sw-pop {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.reveal {
+  animation: sw-rise 0.7s ease-out both;
+}
+.delay-1 {
+  animation-delay: 0.1s;
+}
+.delay-2 {
+  animation-delay: 0.2s;
+}
+.delay-3 {
+  animation-delay: 0.3s;
+}
+/* One transform animation per element, so it stays on the GPU compositor. */
+.float {
+  animation: sw-float 6s ease-in-out 1s infinite;
+}
+.blink {
+  animation: sw-blink 2s ease-in-out infinite;
+}
+.pop {
+  animation: sw-pop 3s ease-in-out infinite;
+}
+
+/* Decorative motion (orbits, floating pills, travelling dots, stacked layers) */
+@keyframes sw-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sw-orbit-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes sw-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes sw-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(16px, -14px);
+  }
+}
+
+@keyframes sw-travel {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100cqw - 12px));
+    opacity: 0;
+  }
+}
+
+.orbit {
+  animation: sw-orbit 40s linear infinite;
+}
+.orbit-rev {
+  animation: sw-orbit-rev 60s linear infinite;
+}
+.bob {
+  animation: sw-bob 5s ease-in-out infinite;
+}
+.bob-2 {
+  animation: sw-bob 6s ease-in-out 1.2s infinite;
+}
+.bob-3 {
+  animation: sw-bob 5.5s ease-in-out 2.1s infinite;
+}
+.drift {
+  animation: sw-drift 12s ease-in-out infinite;
+}
+/* Moves along its parent, which must set `container-type: inline-size`. */
+.travel {
+  position: absolute;
+  left: 0;
+  animation: sw-travel 3.4s ease-in-out infinite;
+}
+/*
+ * Entrance on scroll: src/scripts/motion.ts marks elements that start below the
+ * fold with data-reveal-pending and removes it once they come into view, so each
+ * plays ONCE and always finishes in its final state, wherever scrolling stops.
+ * Without JavaScript nothing is pending and everything is simply visible.
+ */
+.in-view,
+.layer {
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.in-view[data-reveal-pending] {
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+[data-reveal-pending] .layer,
+.layer[data-reveal-pending] {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.layer-2 {
+  transition-delay: 0.2s;
+}
+.layer-3 {
+  transition-delay: 0.4s;
+}
+.layer-4 {
+  transition-delay: 0.6s;
+}
+
+/*
+ * Battery saver: never-ending decorative animations pause while their section
+ * is off screen (src/scripts/motion.ts sets data-offscreen).
+ */
+[data-offscreen] :is(.orbit, .orbit-rev, .bob, .bob-2, .bob-3, .drift, .travel, .float, .blink, .pop),
+[data-offscreen] .node circle,
+[data-offscreen] [class*='iso-'] {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hoverable:hover,
+  .tile:hover,
+  .btn:hover {
+    transform: none;
+  }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  .site-header nav,
+  .site-footer,
+  .skip-link {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  /* Print everything in its final state, even sections not yet scrolled to. */
+  [data-reveal-pending],
+  [data-reveal-pending] .layer {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  [data-reveal-pending] .phase__bar {
+    clip-path: none !important;
+  }
+}

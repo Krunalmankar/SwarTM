@@ -1,0 +1,7 @@
+dist
+test-results
+playwright-report
+.astro
+node_modules
+package-lock.json
+public/api

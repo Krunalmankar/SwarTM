@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import CtaBand from '../components/sections/CtaBand.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import Icon from '../components/ui/Icon.astro';
+import FlowSteps from '../components/sections/FlowSteps.astro';
+import type { IconName } from '../components/ui/icons';
+import { getCaseStudies, getServices, servicePath } from '../lib/content';
+
+const studies = await getCaseStudies();
+const services = new Map((await getServices()).map((s) => [s.id, s]));
+
+const facets: { key: 'problem' | 'approach' | 'outcome'; label: string; icon: IconName; tone: string }[] = [
+  { key: 'problem', label: 'Problem', icon: 'info', tone: 'facet--blue' },
+  { key: 'approach', label: 'Approach', icon: 'route', tone: 'facet--deep' },
+  { key: 'outcome', label: 'Outcome', icon: 'checkCircle', tone: 'facet--green' },
+];
+---
+
+<BaseLayout
+  title="ServiceNow case studies: agentic workflows | SwarTM"
+  description="Selected, anonymised ServiceNow work: agentic workflows for CMDB validation, VM reconciliation and company normalization, as problem, approach and outcome."
+>
+  <PageHero
+    eyebrow="Case studies"
+    title="Real challenges solved with agentic workflows."
+    lead="Selected, anonymised work from enterprise ServiceNow programmes, each presented as problem, approach and outcome."
+  />
+
+  <section class="container stack gap-28 pb-96 in-view">
+    {studies.map((study) => (
+      <article class="card pad-40 stack gap-28" aria-labelledby={`cs-${study.id}`}>
+        <header class="row gap-16 justify-between">
+          <div class="row gap-16 head">
+            <span class="icon-tile icon-tile--52">
+              <Icon name={study.data.icon} size={26} />
+            </span>
+            <div class="stack">
+              <Eyebrow>{study.data.practice}</Eyebrow>
+              <h2 class="heading-3" id={`cs-${study.id}`}>
+                {study.data.title}
+              </h2>
+            </div>
+          </div>
+          <span class="chip chip--lg">{study.data.client}</span>
+        </header>
+        <dl class="grid grid--trio gap-28 facets">
+          {facets.map((facet) => (
+            <div class="stack gap-8">
+              <dt class:list={['facet', facet.tone]}>
+                <Icon name={facet.icon} size={20} />
+                {facet.label}
+              </dt>
+              <dd class="muted">{study.data[facet.key]}</dd>
+            </div>
+          ))}
+        </dl>
+        {study.data.flow && <FlowSteps title={study.data.flow.title} steps={study.data.flow.steps} />}
+        {(() => {
+          const related = study.data.service && services.get(study.data.service.id);
+          return (
+            related && (
+              <div class="related">
+                <a class="arrow-link" href={servicePath(related)}>
+                  Related service: {related.data.homeTitle}
+                  <Icon name="arrowRight" size={16} strokeWidth={2} class="arrow" />
+                </a>
+              </div>
+            )
+          );
+        })()}
+      </article>
+    ))}
+  </section>
+
+  <CtaBand heading="Have a similar challenge?" label="Start a conversation" />
+</BaseLayout>
+
+<style>
+  .head {
+    flex-wrap: nowrap;
+  }
+
+  .related {
+    padding-top: 20px;
+    border-top: 1px solid var(--hairline);
+  }
+
+  /* Phones: icon above the title so the title can use the full card width. */
+  @media (max-width: 600px) {
+    .head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .head :global(.heading-3) {
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+
+  .facets {
+    margin: 0;
+  }
+
+  .facets dd {
+    margin: 0;
+  }
+
+  .facet {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+
+  .facet--blue :global(svg) {
+    color: var(--node-blue);
+  }
+  .facet--deep :global(svg) {
+    color: var(--node-deep);
+  }
+  .facet--green :global(svg) {
+    color: var(--green-text);
+  }
+</style>

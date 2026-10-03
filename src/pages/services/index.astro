@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ArrowLink from '../../components/ui/ArrowLink.astro';
+import PracticeStack from '../../components/sections/PracticeStack.astro';
+import { getServices, servicePath } from '../../lib/content';
+import { breadcrumbSchema } from '../../lib/seo';
+
+const services = await getServices();
+const site = Astro.site!;
+---
+
+<BaseLayout
+  title="ServiceNow services: AI, CMDB & implementation | SwarTM"
+  description="Four connected ServiceNow practices, from a clean platform foundation to AI agents running reliably in production."
+  jsonLd={[
+    breadcrumbSchema(site, [
+      { name: 'Home', path: '/' },
+      { name: 'Services', path: '/services/' },
+    ]),
+  ]}
+>
+  <PageHero
+    eyebrow="Services"
+    title="ServiceNow first, with AI where it delivers measurable value."
+    lead="Four connected practices that support your ServiceNow AI transformation, from a clean platform foundation to AI agents running reliably in production."
+  />
+
+  <PracticeStack services={services} />
+
+  <section class="container pb-96 in-view">
+    <ul class="grid grid--520 gap-24 plain-list">
+      {services.map((service) => (
+        <li>
+          <a
+            class:list={['card pad-36 hoverable stack gap-16 service', service.data.flagship && 'card--dark']}
+            href={servicePath(service)}
+          >
+            {service.data.flagship && (
+              <span class="card-orbit orbit" aria-hidden="true">
+                <span class="card-orbit__dot" />
+              </span>
+            )}
+            <div class="row gap-16 justify-between">
+              <span class:list={['icon-tile icon-tile--52', service.data.flagship && 'icon-tile--brand']}>
+                <Icon name={service.data.icon} size={26} />
+              </span>
+              {service.data.flagship && <span class="badge badge--green">Flagship</span>}
+            </div>
+            <h2 class="heading-4">{service.data.cardTitle}</h2>
+            <p class:list={[service.data.flagship ? 'on-dark-muted' : 'muted']}>{service.data.cardSummary}</p>
+            <ul class="row gap-8 plain-list" aria-label="Covers">
+              {service.data.tags.map((tag) => (
+                <li class="chip">{tag}</li>
+              ))}
+            </ul>
+            <span class:list={['explore', service.data.flagship && 'explore--dark']}>
+              Explore
+              <Icon name="arrowRight" size={16} strokeWidth={2} class="arrow" />
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container pt-72 pb-96 in-view">
+    <div class="card card--dashed also row gap-16">
+      <span class="icon-tile icon-tile--40 icon-tile--muted">
+        <Icon name="grid" size={22} />
+      </span>
+      <p class="muted also__text">
+        <strong class="also__strong">Also available:</strong> Odoo implementation and managed services for
+        clients who run Odoo alongside ServiceNow.
+      </p>
+      <ArrowLink href="/contact/">Ask us</ArrowLink>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .service {
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .card-orbit {
+    position: absolute;
+    z-index: -1;
+    right: -70px;
+    bottom: -90px;
+    width: 260px;
+    height: 260px;
+    border: 1px dashed var(--hairline-dark);
+    border-radius: var(--radius-full);
+  }
+
+  .card-orbit__dot {
+    position: absolute;
+    left: 24px;
+    top: 50px;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    background: var(--signal-green);
+  }
+
+  /* Solid tags on the dark card, so the orbiting dot passes behind them, not over the words. */
+  .card--dark :global(.chip) {
+    background: var(--navy);
+  }
+
+  .explore {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: auto;
+    color: var(--accent-text);
+    font-weight: 600;
+  }
+
+  .explore--dark {
+    color: var(--ink-muted-on-dark);
+  }
+
+  .also {
+    padding: 24px 28px;
+  }
+
+  .also__text {
+    flex: 1 1 320px;
+  }
+
+  .also__strong {
+    color: var(--ink);
+  }
+</style>

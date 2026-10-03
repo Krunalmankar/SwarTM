@@ -1,0 +1,14 @@
+{
+  "name": "SwarTM: ServiceNow AI transformation",
+  "short_name": "SwarTM",
+  "description": "SwarTM designs, builds and runs AI-ready ServiceNow platforms.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#f6f8fb",
+  "theme_color": "#081f3a",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/favicon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

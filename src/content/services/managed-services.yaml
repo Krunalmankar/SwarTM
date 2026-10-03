@@ -1,0 +1,74 @@
+order: 4
+icon: shieldCheck
+shortName: Managed services
+homeTitle: Managed services
+homeSummary: Ongoing support that keeps the platform healthy and improving.
+cardTitle: Managed services & ongoing support
+cardSummary: A dedicated team that runs, upgrades and improves your instance while keeping your AI agents and data healthy.
+tags: [Support, Upgrades, Enhancements]
+stack:
+  level: wrap
+  caption: Runs, upgrades and improves every layer
+
+seo:
+  title: Managed services & ongoing support | SwarTM
+  description: A dedicated ServiceNow team that keeps your instance stable, upgraded and improving, including the data and AI agents that depend on it.
+
+hero:
+  title: Managed services & ongoing support
+  lead: A dedicated ServiceNow team that keeps your instance stable, upgraded and improving, including the data and AI agents that depend on it.
+  cta: Talk about support
+
+glance:
+  - icon: clock
+    label: 'Start:'
+    text: 2 to 4 week onboarding, then a monthly retainer
+  - icon: layers2
+    label: 'Covers:'
+    text: support, upgrades, enhancements, CMDB and AI agent monitoring
+  - icon: users
+    label: 'Team:'
+    text: a named architect plus delivery engineers
+
+problem:
+  heading: Go-live is the start, not the finish.
+  items:
+    - icon: userAlert
+      title: Stretched internal teams
+      text: A small platform team juggles tickets, requests and roadmap work at once.
+    - icon: refresh
+      title: Upgrades keep slipping
+      text: Falling behind releases means missing the newest AI capabilities.
+    - icon: trend
+      title: Quality decays quietly
+      text: Data and agent performance slide without someone watching them.
+
+approach:
+  heading: Reliable operations with continuous monthly improvement.
+  steps:
+    - title: Onboard
+      text: Instance health review, access and runbooks.
+    - title: Run
+      text: Incidents, requests and minor enhancements to agreed SLAs.
+    - title: Improve
+      text: A shared backlog and planned release upgrades.
+    - title: Report
+      text: Monthly health and value review with your stakeholders.
+
+deliverables:
+  - Agreed support model and SLAs
+  - Release upgrade planning and testing
+  - Prioritised enhancement backlog
+  - CMDB health and AI agent monitoring
+  - Monthly health and value report
+  - A named architect as your single contact
+
+timeline:
+  - { label: Onboarding, duration: 2 to 4 weeks, start: 0, width: 20, tone: grey }
+  - { label: Run & support, duration: monthly, start: 20, width: 80, tone: blue }
+  - { label: Upgrades, duration: per release, start: 20, width: 80, tone: deep }
+  - { label: Value reviews, duration: quarterly, start: 20, width: 80, tone: green }
+
+cta:
+  heading: Need a team that knows your instance?
+  label: Talk about support
